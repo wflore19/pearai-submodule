@@ -384,16 +384,26 @@ export class VsCodeIdeUtils {
       // This means there is no terminal open to select text from
       return "";
     }
-
     // Sometimes the above won't successfully separate by command, so we attempt manually
-    const lines = terminalContents.split("\n");
-    const lastLine = lines.pop()?.trim();
+    const removeNonASCIIAndTrim= (str: string): string => {
+      str = str.replace(/[^\x00-\x7F\s]/g, "");
+      return str.trim()
+    };
+    const lines: string[] = terminalContents.split("\n");
+    const lastLine: string | undefined = removeNonASCIIAndTrim(lines.pop() || "")?.trim();
     if (lastLine) {
       let i = lines.length - 1;
-      while (i >= 0 && !lines[i].trim().startsWith(lastLine)) i--;
-      terminalContents = lines.slice(i).join("\n");
+      while (i >= 0) {
+        // Strip non-ASCII characters and spaces from the current line
+        const strippedLine = removeNonASCIIAndTrim(lines[i]);
+        // Check if the stripped current line starts with the last line
+        if (strippedLine.startsWith(lastLine)) {
+          break;
+        }
+        i--;
+        terminalContents = i === -1 ? lines.join("\n") : lines.slice(i).join("\n");
+      }
     }
-
     return terminalContents;
   }
 
