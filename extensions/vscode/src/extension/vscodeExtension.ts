@@ -1,5 +1,5 @@
 import { ConfigHandler } from "core/config/handler";
-import { ContinueServerClient } from "core/continueServer/stubs/client";
+import { PearAIServerClient } from "core/pearaiServer/stubs/client";
 import { CodebaseIndexer, PauseToken } from "core/indexing/indexCodebase";
 import { IdeSettings } from "core/protocol";
 import { getConfigJsonPath, getConfigTsPath } from "core/util/paths";
@@ -36,7 +36,7 @@ export class VsCodeExtension {
     this.diffManager = new DiffManager(context);
     this.ide = new VsCodeIde(this.diffManager);
 
-    const settings = vscode.workspace.getConfiguration("continue");
+    const settings = vscode.workspace.getConfiguration("pearai");
     const remoteConfigServerUrl = settings.get<string | undefined>(
       "remoteConfigServerUrl",
       undefined,
@@ -65,15 +65,13 @@ export class VsCodeExtension {
       },
     );
 
-    const continueServerClient = new ContinueServerClient(
+    const pearAIServerClient = new PearAIServerClient(
       ideSettings.remoteConfigServerUrl,
       userTokenPromise,
     );
 
     // Config Handler with output channel
-    const outputChannel = vscode.window.createOutputChannel(
-      "PearAI",
-    );
+    const outputChannel = vscode.window.createOutputChannel("PearAI");
     this.configHandler = new ConfigHandler(
       this.ide,
       ideSettings,
@@ -110,6 +108,31 @@ export class VsCodeExtension {
       this.configHandler.reloadConfig.bind(this.configHandler),
     );
 
+    // handleURI
+    context.subscriptions.push(
+      vscode.window.registerUriHandler({
+        handleUri(uri: vscode.Uri) {
+          console.log(uri);
+          console.log("Received a custom URI!");
+          if (uri.authority === "pearai.pearai") {
+            if (uri.path === "/ping") {
+              vscode.window.showInformationMessage(
+                "PearAI received a custom URI!",
+              );
+            } else if (uri.path === "/auth") {
+              const queryParams = new URLSearchParams(uri.query);
+              const data = {
+                accessToken: queryParams.get("accessToken"),
+                refreshToken: queryParams.get("refreshToken"),
+              };
+
+              vscode.commands.executeCommand("pearai.updateUserAuth", data);
+            }
+          }
+        },
+      }),
+    );
+
     // Sidebar
     context.subscriptions.push(
       vscode.window.registerWebviewViewProvider(
@@ -142,7 +165,7 @@ export class VsCodeExtension {
       this.configHandler,
       this.ide,
       indexingPauseToken,
-      continueServerClient,
+      pearAIServerClient,
     );
 
     if (
@@ -165,7 +188,7 @@ export class VsCodeExtension {
       verticalDiffCodeLens.refresh.bind(verticalDiffCodeLens);
 
     // Tab autocomplete
-    const config = vscode.workspace.getConfiguration("continue");
+    const config = vscode.workspace.getConfiguration("pearai");
     const enabled = config.get<boolean>("enableTabAutocomplete");
 
     // Register inline completion provider

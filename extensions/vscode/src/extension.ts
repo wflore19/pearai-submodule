@@ -117,6 +117,7 @@ export function activate(context: vscode.ExtensionContext) {
     copySettingsAndInformUser();
   }
   dynamicImportAndActivate(context);
+  console.log('Congratulations, your extension "pearai" is now active!');
 }
 
 export function deactivate() {

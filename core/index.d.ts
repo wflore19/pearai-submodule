@@ -64,7 +64,7 @@ export interface ILLM extends LLMOptions {
   llmRequestHook?: (model: string, prompt: string) => any;
   apiKey?: string;
   apiBase?: string;
-
+  refreshToken?: string;
   engine?: string;
   apiVersion?: string;
   apiType?: string;
@@ -293,7 +293,7 @@ export interface LLMOptions {
   llmRequestHook?: (model: string, prompt: string) => any;
   apiKey?: string;
   apiBase?: string;
-
+  refreshToken?: string;
   useLegacyCompletionsEndpoint?: boolean;
 
   // Azure options
@@ -374,7 +374,15 @@ export interface IndexTag extends BranchAndDir {
   artifactId: string;
 }
 
+export interface PearAuth {
+  accessToken?: string;
+  refreshToken?: string;
+}
+
 export interface IDE {
+  getPearAuth(): Promise<PearAuth | undefined>;
+  updatePearCredentials(auth: PearAuth): Promise<void>;
+  authenticatePear(): Promise<void>;
   getIdeInfo(): Promise<IdeInfo>;
   getDiff(): Promise<string>;
   isTelemetryEnabled(): Promise<boolean>;
@@ -516,7 +524,8 @@ type ModelProvider =
   | "deepinfra"
   | "flowise"
   | "groq"
-  | "continue-proxy"
+  | "pearai-proxy"
+  | "pearai-server"
   | "custom";
 
 export type ModelName =
@@ -632,6 +641,7 @@ export interface ModelDescription {
   model: string;
   apiKey?: string;
   apiBase?: string;
+  refreshToken?: string;
   contextLength?: number;
   template?: TemplateType;
   completionOptions?: BaseCompletionOptions;

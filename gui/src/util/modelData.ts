@@ -18,14 +18,18 @@ export function updatedObj(old: any, pathToValue: { [key: string]: any }) {
 }
 
 export enum ModelProviderTag {
+  "Requires Login" = "Requires Login",
   "Requires API Key" = "Requires API Key",
   "Local" = "Local",
   "Free" = "Free",
+  "Hosted" = "Hosted",
   "Open-Source" = "Open-Source",
 }
 
 export const MODEL_PROVIDER_TAG_COLORS: any = {};
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Requires API Key"]] = "#FF0000";
+MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Hosted"]] = "#ef2bff";
+MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Requires Login"]] = "#ef2bff";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Local"]] = "#00bb00";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Open-Source"]] = "#0033FF";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Free"]] = "#ffff00";
@@ -670,6 +674,20 @@ export const MODEL_INFO: (ModelPackage | string)[] = [
 ];
 
 export const PROVIDER_INFO: { [key: string]: ModelInfo } = {
+  pearaiserver: {
+    title: "PearAI Server",
+    provider: "pearai-server",
+    refPage: "pearai-server",
+    description:
+      "Use PearAI's hosted services for convenient, fully-managed LLM integration.",
+    longDescription:
+      "Eliminate the need to set up or maintain your own API key, offering unlimited* usage at subscription cost.",
+    icon: "pearai.png",
+    tags: [ModelProviderTag["Requires Login"], ModelProviderTag["Hosted"]],
+    packages: [
+      { ...gpt4o, title: "GPT-4o (PearAI Server)" },
+    ],
+  },
   openai: {
     title: "OpenAI",
     provider: "openai",
@@ -1020,34 +1038,5 @@ After it's up and running, you can start using PearAI.`,
       },
       ...osModels,
     ],
-  },
-  freetrial: {
-    title: "PearAI limited free trial",
-    provider: "free-trial",
-    refPage: "freetrial",
-    description:
-      "New users can try out PearAI for free using a proxy server that securely makes calls to OpenAI, Google, or Together using our API key",
-    longDescription:
-      'New users can try out PearAI for free using a proxy server that securely makes calls to OpenAI, Google, or Together using our API key. If you are ready to use your own API key or have used all 250 free uses, you can enter your API key in config.py where it says `apiKey=""` or select another model provider.',
-    icon: "openai.png",
-    tags: [ModelProviderTag.Free],
-    packages: [
-      codellama70bTrial,
-      mixtralTrial,
-      { ...claude3Opus, title: "Claude 3 Opus (trial)" },
-      { ...claude3Sonnet, title: "Claude 3 Sonnet (trial)" },
-      { ...claude3Haiku, title: "Claude 3 Haiku (trial)" },
-      { ...gemini15Pro, title: "Gemini 1.5 Pro (trial)" },
-      { ...gpt4o, title: "GPT-4o (trial)" },
-      { ...gpt35turbo, title: "GPT-3.5-Turbo (trial)" },
-      {
-        ...AUTODETECT,
-        params: {
-          ...AUTODETECT.params,
-          title: "Free Trial",
-        },
-      },
-    ],
-    collectInputFor: [...completionParamsInputs],
   },
 };
