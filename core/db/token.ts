@@ -17,8 +17,9 @@ function isTokenExpired(token: string): boolean {
 
 export async function checkTokens(
   accessToken: string | undefined, 
-  refreshToken: string  | undefined
+  refreshToken: string | undefined
 ): Promise<{ accessToken: string, refreshToken: string }> {
+
   if (!accessToken) {
     return Promise.reject('Access token is not available');
   }
@@ -28,9 +29,11 @@ export async function checkTokens(
   }
 
   if (isTokenExpired(accessToken)) {
+    console.log('Access token is expired, attempting to refresh');
     const { data, error } = await supabase.auth.refreshSession({ refresh_token: refreshToken });
 
     if (error || !data) {
+      console.log('Error refreshing token, redirecting to login:', error);
       window.location.href = '/login';
       return Promise.reject('Error refreshing token');
     }

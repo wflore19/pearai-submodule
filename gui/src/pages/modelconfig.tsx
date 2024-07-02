@@ -119,6 +119,7 @@ function ModelConfig() {
   const pkg = modelInfo?.packages[0]
   const idx = 0
 
+  // TODO: the <h3>3. Click To Complete </h3> step should not exist. The adding to console.json should happen as soon as the 
   return (
     <FormProvider {...formMethods}>
       <div className="overflow-y-scroll">
@@ -173,14 +174,7 @@ function ModelConfig() {
 
           {modelInfo?.provider === "pearai-server" ? (
             <>
-              <h3>1. Create Account & Subscribe To Plan</h3>
-              <CustomModelButton
-                className="m-5"
-                disabled={false}
-                onClick={() => postToIde("openUrl", "https://trypear.ai")}
-              >
-                <h3 className="text-center my-2">Visit PearAI</h3>
-              </CustomModelButton>
+              <h3>1. Create Account & Subscribe at <a href="https://trypear.ai" target="_blank" rel="noopener noreferrer">trypear.ai</a></h3>
               <h3>2. Login w/ PearAI via Webapp </h3>
               <CustomModelButton
                 className="m-5"
@@ -188,13 +182,13 @@ function ModelConfig() {
                 onClick={() =>
                   postToIde(
                     "openUrl",
-                    "http://trypear.ai/signin?callback=code-oss://pearai.pearai/auth" // Change to localhost:3000 and run pear-landing-page repo to test locally
+                    "https://trypear.ai/signin?callback=code-oss://pearai.pearai/auth" // Change to http://localhost:3000 and run pear-landing-page repo to test locally
                   )
                 }
               >
                 <h3 className="text-center my-2">Login w/ PearAI</h3>
               </CustomModelButton>
-              <h3>3. Add PearAI Server </h3>
+              <h3>3. Click To Complete </h3>
               <GridDiv>
                 {modelInfo?.packages.map((pkg, idx) => (
                   <ModelCard
