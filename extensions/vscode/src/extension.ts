@@ -5,18 +5,18 @@ import * as path from 'path';
 import * as os from 'os';
 import { getExtensionVersion } from "./util/util";
 
-const pearAISettingsDir = path.join(os.homedir(), '.pearai-dev');
+const pearAISettingsDir = path.join(os.homedir(), '.pearai');
 const firstLaunchFlag = path.join(pearAISettingsDir, 'firstLaunch.flag');
-const pearAIDevExtensionsDir = path.join(os.homedir(), '.pearai-dev', 'extensions');
+const pearAIExtensionsDir = path.join(os.homedir(), '.pearai', 'extensions');
 
 function getPearAIDevSettingsDir() {
   const platform = process.platform;
   if (platform === 'win32') {
-    return path.join(process.env.APPDATA || '', 'pearai-dev', 'User');
+    return path.join(process.env.APPDATA || '', 'pearai', 'User');
   } else if (platform === 'darwin') {
-    return path.join(os.homedir(), 'Library', 'Application Support', 'pearai-dev', 'User');
+    return path.join(os.homedir(), 'Library', 'Application Support', 'pearai', 'User');
   } else {
-    return path.join(os.homedir(), '.config', 'pearai-dev', 'User');
+    return path.join(os.homedir(), '.config', 'pearai', 'User');
   }
 }
 
@@ -63,8 +63,8 @@ function copyVSCodeSettingsToPearAIDir() {
     fs.mkdirSync(pearAIDevSettingsDir, { recursive: true });
   }
 
-  if (!fs.existsSync(pearAIDevExtensionsDir)) {
-    fs.mkdirSync(pearAIDevExtensionsDir, { recursive: true });
+  if (!fs.existsSync(pearAIExtensionsDir)) {
+    fs.mkdirSync(pearAIExtensionsDir, { recursive: true });
   }
 
   const itemsToCopy = ['settings.json', 'keybindings.json', 'snippets', 'sync'];
@@ -80,7 +80,7 @@ function copyVSCodeSettingsToPearAIDir() {
     }
   });
 
-  copyDirectoryRecursiveSync(vscodeExtensionsDir, pearAIDevExtensionsDir);
+  copyDirectoryRecursiveSync(vscodeExtensionsDir, pearAIExtensionsDir);
 }
 
 function getVSCodeSettingsDir() {
