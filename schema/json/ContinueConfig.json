@@ -707,13 +707,13 @@
         },
         "disable_summaries": {
           "title": "Disable Summaries",
-          "description": "If set to `True`, Continue will not generate summaries for each Step. This can be useful if you want to save on compute.",
+          "description": "If set to `True`, PearAI will not generate summaries for each Step. This can be useful if you want to save on compute.",
           "default": false,
           "type": "boolean"
         },
         "disable_indexing": {
           "title": "Disable Indexing",
-          "description": "If set to `True`, Continue will not index the codebase. This is mainly used for debugging purposes.",
+          "description": "If set to `True`, PearAI will not index the codebase. This is mainly used for debugging purposes.",
           "default": false,
           "type": "boolean"
         },
