@@ -14,7 +14,7 @@ keywords: [quickstart, start, install, vscode, jetbrains]
 
 3. Once you do this, you will see the PearAI logo show up on the left side bar. If you click it, the PearAI extension will open up:
 
-> We strongly recommend moving PearAI to VS Code's right sidebar. This helps keep the file explorer open while using Continue, and the sidebar can be toggled with a simple keyboard shortcut. ![move-to-right-sidebar](/img/move-to-right-sidebar.png)
+> We strongly recommend moving PearAI to VS Code's right sidebar. This helps keep the file explorer open while using PearAI, and the sidebar can be toggled with a simple keyboard shortcut. ![move-to-right-sidebar](/img/move-to-right-sidebar.png)
 
 4. If you have any problems, see the [troubleshooting guide](./troubleshooting.md) or ask for help in [our Discord](https://discord.gg/7QMraJUsQt).
 

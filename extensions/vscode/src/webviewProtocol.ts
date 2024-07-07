@@ -135,7 +135,7 @@ export class VsCodeWebviewProtocol {
             } catch {}
             if (message.includes("exceeded")) {
               message +=
-                " To keep using Continue, you can set up a local model or use your own API key.";
+                " To keep using PearAI, you can set up a local model or use your own API key.";
             } else if (message.includes("401 Unauthorized")) {
               return;
             } else {
