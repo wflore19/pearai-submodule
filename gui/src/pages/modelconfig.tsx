@@ -194,7 +194,7 @@ function ModelConfig() {
                   <ModelCard
                     key={idx}
                     disabled={disableModelCards()}
-                    title={"Add PearAI Server"}
+                    title={"Start Coding 😎"}     
                     description={""}
                     tags={pkg.tags}
                     dimensions={pkg.dimensions}
