@@ -10,7 +10,7 @@ import { getPlatform } from "../../util";
 
 const GridDiv = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
   grid-gap: 2rem;
   padding: 1rem;
   justify-items: center;
@@ -71,15 +71,15 @@ interface KeyboardShortcutProps {
 function KeyboardShortcut(props: KeyboardShortcutProps) {
   const shortcut = getPlatform() === "mac" ? props.mac : props.windows;
   return (
-    <div className="flex justify-between w-full items-center">
-      <span
+    <div className='flex justify-between w-full items-center gap-3'>
+      <div
         style={{
           color: vscForeground,
         }}
       >
         {props.description}
-      </span>
-      <div className="flex gap-2 float-right">
+      </div>
+      <div className='flex gap-2'>
         {shortcut.split(" ").map((key, i) => {
           return <KeyDiv key={i} text={key}></KeyDiv>;
         })}
@@ -218,7 +218,7 @@ function KeyboardShortcutsDialog() {
   return (
     <div className="p-2">
       <h3 className="my-3 mx-auto text-center">Keyboard Shortcuts</h3>
-      <GridDiv>
+      <GridDiv className='overflow-x-auto'>
         {(localStorage.getItem("ide") === "jetbrains"
           ? jetbrainsShortcuts
           : vscodeShortcuts

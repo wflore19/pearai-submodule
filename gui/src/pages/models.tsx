@@ -22,7 +22,7 @@ const IntroDiv = styled.div`
 
 const GridDiv = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
   grid-gap: 2rem;
   padding: 1rem;
   justify-items: center;
@@ -37,7 +37,7 @@ function Models() {
   const [providersSelected, setProvidersSelected] = React.useState(true);
 
   return (
-    <div className="overflow-y-scroll">
+    <div>
       <div
         className="items-center flex m-0 p-0 sticky top-0"
         style={{
