@@ -25,7 +25,7 @@ import {
 
 const GridDiv = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
   grid-gap: 2rem;
   padding: 1rem;
   justify-items: center;
@@ -186,11 +186,6 @@ function ModelConfig() {
                   )
                 }
               >
-              <img
-              src={`${window.vscMediaUrl}/logos/${modelInfo.icon}`}
-              height="24px"
-              style={{ marginRight: "5px" }}
-              />
                 <h3 className="text-center my-2">Login</h3>
               <img
               src={`${window.vscMediaUrl}/logos/${modelInfo.icon}`}
@@ -204,7 +199,7 @@ function ModelConfig() {
                   <ModelCard
                     key={idx}
                     disabled={disableModelCards()}
-                    title={"Start coding 😎"}
+                    title={"Start Coding 😎"}
                     description={""}
                     tags={pkg.tags}
                     dimensions={pkg.dimensions}
