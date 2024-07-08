@@ -14,7 +14,7 @@ export function CopyButton(props: CopyButtonProps) {
   return (
     <>
       <HeaderButtonWithText
-        text={copied ? "Copied!" : "Copy"}
+        text={""}
         onClick={(e) => {
           const text =
             typeof props.text === "string" ? props.text : props.text();
@@ -29,9 +29,13 @@ export function CopyButton(props: CopyButtonProps) {
         }}
       >
         {copied ? (
-          <CheckIcon className="w-4 h-4 text-green-500" />
+          <>
+            <CheckIcon className="w-4 h-4 text-green-5000" /> Copied!
+          </>
         ) : (
-          <ClipboardIcon className="w-4 h-4" color={props.color} />
+          <>
+            <ClipboardIcon className="w-4 h-4" color={props.color} /> Copy
+          </>
         )}
       </HeaderButtonWithText>
     </>

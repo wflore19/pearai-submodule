@@ -49,7 +49,7 @@ function PreWithToolbar(props: {
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
-      {!toolbarBottom && hovering && (
+      {!toolbarBottom && (
         <CodeBlockToolBar
           text={copyValue}
           bottom={toolbarBottom}
@@ -57,7 +57,7 @@ function PreWithToolbar(props: {
         ></CodeBlockToolBar>
       )}
       {props.children}
-      {toolbarBottom && hovering && (
+      {toolbarBottom && (
         <CodeBlockToolBar
           text={copyValue}
           bottom={toolbarBottom}
