@@ -15,7 +15,7 @@ import StyledMarkdownPreview from "../components/markdown/StyledMarkdownPreview"
 import ModelCard from "../components/modelSelection/ModelCard";
 import { useNavigationListener } from "../hooks/useNavigationListener";
 import { setDefaultModel } from "../redux/slices/stateSlice";
-import { ideRequest, postToIde } from "../util/ide";
+import { postToIde } from "../util/ide";
 import {
   MODEL_PROVIDER_TAG_COLORS,
   ModelInfo,
@@ -171,10 +171,8 @@ function ModelConfig() {
             className="mt-2"
             source={modelInfo?.longDescription || modelInfo?.description}
           />
-          <br />
 
-          {(modelInfo?.collectInputFor?.filter((d) => d.required).length || 0) >
-            0 && (
+          {modelInfo?.provider === "pearai-server" ? (
             <>
               <h3>1. Create Account & Subscribe at <a href="https://trypear.ai" target="_blank" rel="noopener noreferrer">trypear.ai</a></h3>
               <h3>2. Login with PearAI via Webapp </h3>
@@ -188,6 +186,11 @@ function ModelConfig() {
                   )
                 }
               >
+              <img
+              src={`${window.vscMediaUrl}/logos/${modelInfo.icon}`}
+              height="24px"
+              style={{ marginRight: "5px" }}
+              />
                 <h3 className="text-center my-2">Login</h3>
               <img
               src={`${window.vscMediaUrl}/logos/${modelInfo.icon}`}

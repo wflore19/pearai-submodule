@@ -27,6 +27,8 @@ export enum ModelProviderTag {
 }
 
 export const MODEL_PROVIDER_TAG_COLORS: any = {};
+MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Requires Login"]] = "#FF4500"; // Orange-red
+MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Hosted"]] = "#008000"; // Green
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Requires API Key"]] = "#FF0000";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Local"]] = "#00bb00";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Open-Source"]] = "#0033FF";
