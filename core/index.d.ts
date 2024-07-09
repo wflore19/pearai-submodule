@@ -505,6 +505,7 @@ type TemplateType =
   | "llama3";
 
 type ModelProvider =
+  | "pearai"
   | "openai"
   | "free-trial"
   | "anthropic"
@@ -569,6 +570,7 @@ export type ModelName =
   | "claude-2"
   | "claude-3-opus-20240229"
   | "claude-3-sonnet-20240229"
+  | "claude-3-5-sonnet-20240620"
   | "claude-3-haiku-20240307"
   | "claude-2.1"
   // Cohere

@@ -68,7 +68,7 @@ export abstract class BaseLLM implements ILLM {
   }
 
   supportsPrefill(): boolean {
-    return ["ollama", "anthropic"].includes(this.providerName);
+    return ["ollama", "anthropic", "claude"].includes(this.providerName);
   }
 
   uniqueId: string;

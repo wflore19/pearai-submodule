@@ -62,6 +62,7 @@ const MODEL_SUPPORTS_IMAGES: string[] = [
   "gpt-4o",
   "gpt-4-vision",
   "claude-3",
+  "claude-3-5",
   "gemini-ultra",
   "gemini-1.5-pro",
   "sonnet",

@@ -140,6 +140,8 @@ codeql
 .continue
 .test
 .tiktoken_cache
+**/.pearai
+.pearai
 
 
 # IntelliJ Plugin 

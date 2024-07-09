@@ -107,7 +107,6 @@ export class VsCodeExtension {
     setupRemoteConfigSync(
       this.configHandler.reloadConfig.bind(this.configHandler),
     );
-
     // handleURI
     context.subscriptions.push(
       vscode.window.registerUriHandler({
@@ -132,7 +131,6 @@ export class VsCodeExtension {
         },
       }),
     );
-
     // Sidebar
     context.subscriptions.push(
       vscode.window.registerWebviewViewProvider(

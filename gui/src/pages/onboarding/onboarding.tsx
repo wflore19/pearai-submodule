@@ -96,7 +96,7 @@ function Onboarding() {
           <b>Autocomplete:</b> Starcoder 7b via Fireworks AI (free trial)
           <br />
           <br />
-          <b>Chat:</b> GPT-4, Claude 3, and others (free trial)
+          <b>Chat:</b> GPT-4, Claude 3.5, and others (free trial)
         </p>
       )}
       <br></br>

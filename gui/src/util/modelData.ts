@@ -28,8 +28,6 @@ export enum ModelProviderTag {
 
 export const MODEL_PROVIDER_TAG_COLORS: any = {};
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Requires API Key"]] = "#FF0000";
-MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Hosted"]] = "#ef2bff";
-MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Requires Login"]] = "#ef2bff";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Local"]] = "#00bb00";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Open-Source"]] = "#0033FF";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Free"]] = "#ffff00";
@@ -623,6 +621,20 @@ const claude3Sonnet: ModelPackage = {
   icon: "anthropic.png",
 };
 
+const claude35Sonnet: ModelPackage = {
+  title: "Claude 3.5 Sonnet",
+  description:
+    "The latest most elite model in the Claude 3 series!",
+  params: {
+    model: "claude-3-5-sonnet-20240620",
+    contextLength: 200_000,
+    title: "Claude 3.5 Sonnet",
+    apiKey: "",
+  },
+  providerOptions: ["anthropic", "freetrial"],
+  icon: "anthropic.png",
+};
+
 const claude3Haiku: ModelPackage = {
   title: "Claude 3 Haiku",
   description:
@@ -656,6 +668,7 @@ export const MODEL_INFO: (ModelPackage | string)[] = [
   "Anthropic",
   claude3Opus,
   claude3Sonnet,
+  claude35Sonnet,
   claude3Haiku,
   // claude2,
   "Cohere",
@@ -747,6 +760,7 @@ export const PROVIDER_INFO: { [key: string]: ModelInfo } = {
     packages: [
       claude3Opus,
       claude3Sonnet,
+      claude35Sonnet,
       claude3Haiku,
       // claude2
     ],
@@ -1003,7 +1017,7 @@ After it's up and running, you can start using PearAI.`,
   //   description:
   //     "Bedrock is Amazon's provider of multiple diverse language models.",
   //   tags: [ModelProviderTag["Requires API Key"]],
-  //   packages: [claude3Sonnet, claude3Haiku],
+  //   packages: [claude3Sonnet, claude35Sonnet, claude3Haiku],
   // },
   "openai-aiohttp": {
     title: "Other OpenAI-compatible API",

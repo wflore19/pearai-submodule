@@ -11,6 +11,12 @@ To setup Bedrock, add the following to your `config.json` file:
       "model": "anthropic.claude-3-sonnet-20240229-v1:0",
       "region": "us-east-1"
     }
+    {
+      "title": "Bedrock: Claude 3-5 Sonnet",
+      "provider": "bedrock",
+      "model": "anthropic.claude-3-5-sonnet-20240620-v1:0",
+      "region": "us-east-1"
+    }
   ]
 }
 ```

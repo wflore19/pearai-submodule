@@ -33,7 +33,7 @@ function ExistingUserOnboarding() {
       <div className="m-auto p-2 max-w-96 mt-16 overflow-y-scroll">
         <h1 className="text-center">Use Improved Models?</h1>
         <p className="text-center pb-2">
-          Continue now integrates with higher quality cloud models for
+          PearAI now integrates with higher quality cloud models for
           autocomplete and codebase retrieval.
         </p>
         <Div
@@ -49,7 +49,7 @@ function ExistingUserOnboarding() {
         >
           <h3>🔒 Keep existing setup</h3>
           <p>
-            Continue using fully local autocomplete + embeddings, or whichever
+            PearAI using fully local autocomplete + embeddings, or whichever
             options you have configured.
           </p>
         </Div>
@@ -67,7 +67,7 @@ function ExistingUserOnboarding() {
         >
           <h3>✨ Use cloud models</h3>
           <p>
-            Continue's autocomplete and codebase retrieval will feel
+            PearAI's autocomplete and codebase retrieval will feel
             significantly improved. API calls are made to Fireworks/Voyage, but
             code is only ever stored locally.
           </p>

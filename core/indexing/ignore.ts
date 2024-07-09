@@ -78,6 +78,7 @@ export const DEFAULT_IGNORE_DIRS = [
   ".pytest_cache",
   ".vscode-test",
   ".continue",
+  ".pearai",
   "__pycache__",
   "site-packages",
   ".cache",

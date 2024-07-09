@@ -130,6 +130,7 @@ class FreeTrial extends BaseLLM {
       "gpt-4o",
       "gemini-1.5-pro-latest",
       "claude-3-sonnet-20240229",
+      "claude-3-5-sonnet-20240620",
       "claude-3-haiku-20240307",
     ];
   }

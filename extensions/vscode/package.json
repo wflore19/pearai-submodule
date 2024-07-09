@@ -2,7 +2,7 @@
   "name": "pearai",
   "publisher": "pearai",
   "icon": "media/icon.png",
-  "version": "0.9.159",
+  "version": "0.9.162",
   "repository": {
     "type": "git",
     "url": "https://github.com/trypear/pearai-app"
@@ -97,7 +97,7 @@
     },
     "commands": [
       {
-        "command": "pearai.debug2",
+        "command": "pearai.debug",
         "category": "PearAI",
         "title": "Debug",
         "group": "PearAI"

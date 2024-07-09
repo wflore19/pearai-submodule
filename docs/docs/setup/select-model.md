@@ -1,7 +1,7 @@
 ---
 title: Select models
 description: Configure LLMs
-keywords: [llama-3, gpt-4, claude-3, gemini-pro, deepseek]
+keywords: [llama-3, gpt-4, claude-3, claude-3-5, gemini-pro, deepseek]
 ---
 
 # Select models
@@ -33,7 +33,7 @@ You likely want to use a model that is 30B+ parameters for chat.
 #### Claude 3 from Anthropic
 
 - Unlimited budget: `claude-3-opus-20240229`
-- Limited budget: `claude-3-sonnet-20240229`
+- Limited budget: `claude-3-sonnet-20240229`, `claude-3-5-sonnet-20240620`
 
 #### GPT-4o from OpenAI
 
