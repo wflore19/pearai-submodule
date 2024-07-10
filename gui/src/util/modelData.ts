@@ -27,8 +27,8 @@ export enum ModelProviderTag {
 }
 
 export const MODEL_PROVIDER_TAG_COLORS: any = {};
-MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Requires Login"]] = "#FF4500"; // Orange-red
-MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Hosted"]] = "#008000"; // Green
+MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Requires Login"]] = "#FF4500"; 
+MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Hosted"]] = "#008000"; 
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Requires API Key"]] = "#FF0000";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Local"]] = "#00bb00";
 MODEL_PROVIDER_TAG_COLORS[ModelProviderTag["Open-Source"]] = "#0033FF";
@@ -700,7 +700,14 @@ export const PROVIDER_INFO: { [key: string]: ModelInfo } = {
     icon: "pearai.png",
     tags: [ModelProviderTag["Requires Login"], ModelProviderTag["Hosted"]],
     packages: [
-      { ...gpt4o, title: "GPT-4o (PearAI Server)" },
+      {
+        ...gpt4o,
+        title: "PearAI Server",
+        params: {
+          ...gpt4o.params,
+          title: "PearAI Server"
+        }
+      }
     ],
   },
   openai: {

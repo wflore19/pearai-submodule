@@ -158,6 +158,12 @@ function GUI(props: GUIProps) {
 
   const defaultModel = useSelector(defaultModelSelector);
 
+  // If there are no providers in config, we should redirect to models
+  // This is the case on first install currently
+  if (defaultModel?.provider === undefined) {
+    navigate("/models");
+  }
+
   const active = useSelector((state: RootState) => state.state.active);
 
   // #endregion

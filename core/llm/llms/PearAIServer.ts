@@ -20,12 +20,7 @@ class PearAIServer extends BaseLLM {
   constructor(options: LLMOptions) {
     super(options);
   }
-
-  static defaultOptions: Partial<LLMOptions> = {
-    model: "gpt-4o",
-    title: "PearAI LLM",
-  };
-
+  
   private async _getHeaders() {
     return {
       uniqueId: this.uniqueId || "None",
@@ -202,13 +197,7 @@ class PearAIServer extends BaseLLM {
 
   async listModels(): Promise<string[]> {
     return [
-      "llama3-70b",
-      "gpt-3.5-turbo",
       "gpt-4o",
-      "gemini-1.5-pro-latest",
-      "claude-3-sonnet-20240229",
-      "claude-3-5-sonnet-20240620",
-      "claude-3-haiku-20240307",
     ];
   }
 }

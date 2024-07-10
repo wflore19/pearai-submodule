@@ -64,7 +64,7 @@ function Models() {
         }}
       ></Toggle>
       <IntroDiv>
-        To set up an LLM you will choose
+        Welcome! Get set up by choosing:
         <ul>
           <li>
             a provider (the service used to run the LLM, e.g. Ollama,
@@ -72,9 +72,6 @@ function Models() {
           </li>
           <li>a model (the LLM being run, e.g. GPT-4, CodeLlama).</li>
         </ul>
-        To read more about the options, check out our{" "}
-        <a href="https://trypear.ai/model-setup/overview">overview</a> in
-        the docs.
       </IntroDiv>
       {providersSelected ? (
         <GridDiv>
