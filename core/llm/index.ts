@@ -52,11 +52,12 @@ export abstract class BaseLLM implements ILLM {
 
   supportsCompletions(): boolean {
     if (this.providerName === "openai") {
-      if (
-        this.apiBase?.includes("api.groq.com") ||
-        this.apiBase?.includes(":1337") ||
-        this._llmOptions.useLegacyCompletionsEndpoint?.valueOf() === false
-      ) {
+      // Check if it is a string before performing on it.
+      const isGroqApi = typeof this.apiBase === "string" && /^https:\/\/(?:[a-zA-Z0-9-]+\.)*api\.groq\.com(?:\/|$)/.test(this.apiBase);
+      const isLegacyPort = this.apiBase?.includes(":1337");
+      const usesNewEndpoint = this._llmOptions.useLegacyCompletionsEndpoint?.valueOf() === false;
+      
+      if (isGroqApi || isLegacyPort || usesNewEndpoint) {
         // Jan + Groq don't support completions : (
         return false;
       }

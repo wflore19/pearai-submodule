@@ -2,7 +2,7 @@
   "name": "pearai",
   "publisher": "pearai",
   "icon": "media/icon.png",
-  "version": "0.9.162",
+  "version": "0.9.163",
   "repository": {
     "type": "git",
     "url": "https://github.com/trypear/pearai-app"
@@ -585,7 +585,7 @@
     "cors": "^2.8.5",
     "dbinfoz": "^0.1.4",
     "downshift": "^7.6.0",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "fkill": "^8.1.0",
     "follow-redirects": "^1.15.4",
     "handlebars": "^4.7.8",
@@ -612,12 +612,12 @@
     "socket.io-client": "^4.7.2",
     "strip-ansi": "^7.1.0",
     "tailwindcss": "^3.3.2",
-    "undici": "^6.2.0",
+    "undici": "^6.19.2",
     "uuid": "^9.0.1",
     "uuidv4": "^6.2.13",
     "vectordb": "^0.4.20",
     "vscode-languageclient": "^8.0.2",
-    "ws": "^8.13.0",
+    "ws": "^8.17.1",
     "yarn": "^1.22.21"
   }
 }

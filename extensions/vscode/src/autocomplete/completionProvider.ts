@@ -23,9 +23,9 @@ export class ContinueCompletionProvider
 {
   private onError(e: any) {
     const options = ["Documentation"];
-    if (e.message.includes("https://ollama.ai")) {
+    if (/^https:\/\/(?:[a-zA-Z0-9-]+\.)*ollama\.ai(?:\/|$)/.test(e.message)) {
       options.push("Download Ollama");
-    }
+  }
     vscode.window.showErrorMessage(e.message, ...options).then((val) => {
       if (val === "Documentation") {
         vscode.env.openExternal(

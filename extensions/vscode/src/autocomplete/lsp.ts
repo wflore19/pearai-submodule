@@ -63,7 +63,8 @@ async function executeGotoProvider(input: GotoInput): Promise<RangeInFile[]> {
 
     return results;
   } catch (e) {
-    console.warn(`Error executing ${name}:`, e);
+    console.warn(`Error executing %s:`, name);
+    console.warn(e);
     return [];
   }
 }
