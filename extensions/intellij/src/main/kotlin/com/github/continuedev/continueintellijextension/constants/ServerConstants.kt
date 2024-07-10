@@ -77,7 +77,7 @@ export {
 };
 """
 
-fun getContinueGlobalPath(): String {
+fun getPearAIGlobalPath(): String {
     val continuePath = Paths.get(System.getProperty("user.home"), ".continue")
     if (Files.notExists(continuePath)) {
         Files.createDirectories(continuePath)
@@ -86,7 +86,7 @@ fun getContinueGlobalPath(): String {
 }
 
 fun getConfigJsonPath(): String {
-    val path = Paths.get(getContinueGlobalPath(), "config.json")
+    val path = Paths.get(getPearAIGlobalPath(), "config.json")
     if (Files.notExists(path)) {
         Files.createFile(path)
         Files.writeString(path, DEFAULT_CONFIG);
@@ -95,7 +95,7 @@ fun getConfigJsonPath(): String {
 }
 
 fun getConfigJsPath(): String {
-    val path = Paths.get(getContinueGlobalPath(), "config.js")
+    val path = Paths.get(getPearAIGlobalPath(), "config.js")
     if (Files.notExists(path)) {
         Files.createFile(path)
         Files.writeString(path, DEFAULT_CONFIG_JS);
@@ -104,7 +104,7 @@ fun getConfigJsPath(): String {
 }
 
 fun getSessionsDir(): String {
-    val path = Paths.get(getContinueGlobalPath(), "sessions")
+    val path = Paths.get(getPearAIGlobalPath(), "sessions")
     if (Files.notExists(path)) {
         Files.createDirectories(path)
     }
@@ -130,7 +130,7 @@ fun getSessionFilePath(sessionId: String): String {
 }
 
 fun devDataPath(): String {
-    val path = Paths.get(getContinueGlobalPath(), "dev_data")
+    val path = Paths.get(getPearAIGlobalPath(), "dev_data")
     if (Files.notExists(path)) {
         Files.createDirectories(path)
     }
@@ -146,7 +146,7 @@ fun getDevDataFilepath(filename: String): String {
 }
 
 fun getMigrationsFolderPath(): String {
-    val path = Paths.get(getContinueGlobalPath(), ".migrations")
+    val path = Paths.get(getPearAIGlobalPath(), ".migrations")
     if (Files.notExists(path)) {
         Files.createDirectories(path)
     }

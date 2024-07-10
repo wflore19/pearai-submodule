@@ -37,7 +37,7 @@ Here are use cases where it is not useful:
 
 There are a few options that let you configure the behavior of the codebase context provider. These can be set in `config.json`, and are the same for the codebase and folder context providers:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "contextProviders": [
     {
@@ -72,7 +72,7 @@ We also support other methods of generating embeddings, which can be configured 
 
 [Transformers.js](https://huggingface.co/docs/transformers.js/index) is a JavaScript port of the popular [Transformers](https://huggingface.co/transformers/) library. It allows embeddings to be calculated locally in the browser (or in this case inside of the sidebar of your IDE). The model used is `all-MiniLM-L6-v2`, which is shipped alongside the PearAI extension and generates embeddings of size 384.
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "embeddingsProvider": {
     "provider": "transformers.js"
@@ -84,7 +84,7 @@ We also support other methods of generating embeddings, which can be configured 
 
 [Ollama](https://ollama.ai) is the easiest way to get up and running with open-source language models. It provides an entirely local REST API for working with LLMs, including generating embeddings. We recommend using an embeddings model like `nomic-embed-text`:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "embeddingsProvider": {
     "provider": "ollama",
@@ -98,7 +98,7 @@ We also support other methods of generating embeddings, which can be configured 
 
 Voyage AI offers the best embeddings for code with their voyage-code-2 model. After obtaining an API key from [here](https://www.voyageai.com/), you can configure like this:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "embeddingsProvider": {
     "provider": "openai",
@@ -117,7 +117,7 @@ OpenAI's [embeddings](https://platform.openai.com/docs/guides/embeddings) are hi
 Configuration for text-embedding-3-small Model. This is default.
 The text-embedding-3-small model offers an outstanding balance between performance and efficiency, suitable for a versatile range of applications.
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "embeddingsProvider": {
     "provider": "openai",
@@ -131,7 +131,7 @@ The text-embedding-3-small model offers an outstanding balance between performan
 Configuration for text-embedding-3-large Model
 For those requiring the highest level of embedding detail and precision, the text-embedding-3-large model is the better choice.
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "embeddingsProvider": {
     "provider": "openai",
@@ -145,7 +145,7 @@ For those requiring the highest level of embedding detail and precision, the tex
 Legacy Model Configuration
 For certain scenarios, you may still find the text-embedding-ada-002 model relevant. Below is the configuration example:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "embeddingsProvider": {
     "provider": "openai",
@@ -160,7 +160,7 @@ For certain scenarios, you may still find the text-embedding-ada-002 model relev
 
 Configuration for the `embed-english-v3.0` model. This is the default.
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "embeddingsProvider": {
     "provider": "cohere",

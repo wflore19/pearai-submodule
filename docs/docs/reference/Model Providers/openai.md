@@ -39,7 +39,7 @@ OpenAI compatible APIs
 
 If you are [using an OpenAI compatible server / API](../../setup/select-provider#local), you can change the `apiBase` like this:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "models": [
     {

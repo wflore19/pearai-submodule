@@ -4,7 +4,7 @@ To allow added flexibility and eventually support an entire plugin ecosystem, Pe
 
 Whenever PearAI loads, it carries out the following steps:
 
-1. Load `~/.continue/config.json`
+1. Load `~/.pearai/config.json`
 2. Convert this into a `Config` object
 3. If `~/.continue/config.ts` exists and has defined `modifyConfig` correctly, call `modifyConfig` with the `Config` object to generate the final configuration
 

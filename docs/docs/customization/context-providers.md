@@ -14,7 +14,7 @@ As an example, say you are working on solving a new GitHub Issue. You type '@iss
 
 ## Built-in Context Providers
 
-To use any of the built-in context providers, open `~/.continue/config.json` and add it to the `contextProviders` list.
+To use any of the built-in context providers, open `~/.pearai/config.json` and add it to the `contextProviders` list.
 
 ### Code
 

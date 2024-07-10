@@ -10,7 +10,7 @@ import {
   Thread,
 } from "../index.js";
 
-import { getContinueGlobalPath } from "./paths.js";
+import { getPearAIGlobalPath } from "./paths.js";
 
 class FileSystemIde implements IDE {
   getPearAuth(): Promise<PearAuth | undefined> {
@@ -136,7 +136,7 @@ class FileSystemIde implements IDE {
   }
 
   getContinueDir(): Promise<string> {
-    return Promise.resolve(getContinueGlobalPath());
+    return Promise.resolve(getPearAIGlobalPath());
   }
 
   openFile(path: string): Promise<void> {

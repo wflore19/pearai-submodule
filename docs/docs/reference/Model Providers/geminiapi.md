@@ -1,8 +1,8 @@
 # Gemini API
 
-The Google Gemini API is currently in beta. You can [create an API key in Google AI Studio](https://aistudio.google.com) and use `gemini-1.5-pro-latest`. Change `~/.continue/config.json` to look like this:
+The Google Gemini API is currently in beta. You can [create an API key in Google AI Studio](https://aistudio.google.com) and use `gemini-1.5-pro-latest`. Change `~/.pearai/config.json` to look like this:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "models": [
     {

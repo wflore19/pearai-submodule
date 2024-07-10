@@ -1,6 +1,6 @@
 package com.github.continuedev.continueintellijextension.activities
 
-import com.github.continuedev.continueintellijextension.constants.getContinueGlobalPath
+import com.github.continuedev.continueintellijextension.constants.getPearAIGlobalPath
 import com.github.continuedev.continueintellijextension.`continue`.*
 import com.github.continuedev.continueintellijextension.listeners.ContinuePluginSelectionListener
 import com.github.continuedev.continueintellijextension.services.ContinueExtensionSettings
@@ -36,7 +36,7 @@ fun showTutorial(project: Project) {
         if (!System.getProperty("os.name").toLowerCase().contains("mac")) {
             content = content.replace("⌘", "⌃")
         }
-        val filepath = Paths.get(getContinueGlobalPath(), "pearai_tutorial.py").toString()
+        val filepath = Paths.get(getPearAIGlobalPath(), "pearai_tutorial.py").toString()
         File(filepath).writeText(content)
         val virtualFile = LocalFileSystem.getInstance().findFileByPath(filepath)
 

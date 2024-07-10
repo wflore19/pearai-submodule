@@ -16,7 +16,7 @@ If you haven't already installed Continue, you can do that [here](https://market
 2. Copy your API key that appears on the welcome screen
 3. Update your PearAI config file like this:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "models": [
     {
@@ -35,7 +35,7 @@ If you haven't already installed Continue, you can do that [here](https://market
 2. Open a terminal and run `ollama run codellama`
 3. Change your PearAI config file like this:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "models": [
     {
@@ -52,7 +52,7 @@ If you haven't already installed Continue, you can do that [here](https://market
 1. Get your Replicate API key [here](https://replicate.ai/)
 2. Change your PearAI config file like this:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "models": [
     {
@@ -71,7 +71,7 @@ If you haven't already installed Continue, you can do that [here](https://market
 2. Start the OpenAI compatible API (ref: https://github.com/lm-sys/FastChat/blob/main/docs/openai_api.md).
 3. Change your PearAI config file like this:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "models": [
     {

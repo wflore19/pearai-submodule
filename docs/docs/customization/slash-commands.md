@@ -12,7 +12,7 @@ Slash commands are shortcuts that can be activated by typing '/' and selecting f
 
 ## Built-in Slash Commands
 
-To use any of the built-in slash commands, open `~/.continue/config.json` and add it to the `slashCommands` list.
+To use any of the built-in slash commands, open `~/.pearai/config.json` and add it to the `slashCommands` list.
 
 ### `/edit`
 
@@ -124,7 +124,7 @@ You can add custom slash commands by adding to the `customCommands` property in 
 
 Custom commands are great when you are frequently reusing a prompt. For example, if you've crafted a great prompt and frequently ask the LLM to check for mistakes in your code, you could add a command like this:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 customCommands=[{
         "name": "check",
         "description": "Check for mistakes in my code",

@@ -155,8 +155,8 @@ function Settings() {
               postToIde("showFile", {
                 filepath:
                   getPlatform() == "windows"
-                    ? "~\\.continue\\config.json"
-                    : "~/.continue/config.json",
+                    ? "~\\.pearai\\config.json"
+                    : "~/.pearai/config.json",
               });
             }}
           >

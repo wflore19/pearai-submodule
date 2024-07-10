@@ -25,7 +25,7 @@ All data is anonymous and cleaned of PII before being sent to PostHog.
 
 The `~/.continue` directory contains a `config.json` file that looks like this:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
     "allowAnonymousTelemetry": true,
     ...

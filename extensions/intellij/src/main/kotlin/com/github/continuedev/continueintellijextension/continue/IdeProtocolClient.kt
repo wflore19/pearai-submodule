@@ -351,7 +351,7 @@ class IdeProtocolClient (
                         respond(null);
                     }
                     "getContinueDir" -> {
-                        respond(getContinueGlobalPath())
+                        respond(getPearAIGlobalPath())
                     }
                     "openFile" -> {
                         setFileOpen((data as Map<String, Any>)["path"] as String)

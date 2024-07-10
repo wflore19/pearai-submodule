@@ -14,10 +14,10 @@ While the PearAI extension is always free to use, we cannot support infinite fre
 Ollama is a local service that makes it easy to run language models on your laptop.
 
 1. Download Ollama from https://ollama.ai
-2. Open `~/.continue/config.json`. You can do this by clicking the gear icon in the bottom right corner of the PearAI sidebar
+2. Open `~/.pearai/config.json`. You can do this by clicking the gear icon in the bottom right corner of the PearAI sidebar
 3. Add the following to your `config.json`:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "models": [
     {
@@ -36,7 +36,7 @@ Groq provides lightning fast inference for open-source LLMs like Llama3, up to t
 1. Obtain an API key from https://console.groq.com
 2. Add the following to your `config.json`:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "models": [
     {
@@ -54,7 +54,7 @@ Groq provides lightning fast inference for open-source LLMs like Llama3, up to t
 1. Copy your API key from https://platform.openai.com/account/api-keys
 2. Add the following to your `config.json`:
 
-```json title="~/.continue/config.json"
+```json title="~/.pearai/config.json"
 {
   "models": [
     {

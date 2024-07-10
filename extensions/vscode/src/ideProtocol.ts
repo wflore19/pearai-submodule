@@ -10,7 +10,7 @@ import {
   Range,
   Thread,
 } from "core";
-import { getContinueGlobalPath } from "core/util/paths";
+import { getPearAIGlobalPath } from "core/util/paths";
 import * as path from "path";
 import * as vscode from "vscode";
 import { DiffManager } from "./diff/horizontal";
@@ -204,7 +204,7 @@ class VsCodeIde implements IDE {
   }
 
   async getContinueDir(): Promise<string> {
-    return getContinueGlobalPath();
+    return getPearAIGlobalPath();
   }
 
   async writeFile(path: string, contents: string): Promise<void> {
