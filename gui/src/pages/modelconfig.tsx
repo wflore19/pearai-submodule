@@ -174,8 +174,9 @@ function ModelConfig() {
 
           {modelInfo?.provider === "pearai-server" ? (
             <>
-              <h3>1. Create Account & Subscribe at <a href="https://trypear.ai/pricing" target="_blank" rel="noopener noreferrer">trypear.ai</a></h3>
+              <h3>1. Sign Up and Subscribe at <a href="https://trypear.ai/pricing" target="_blank" rel="noopener noreferrer">trypear.ai/pricing</a></h3>
               <h3>2. Login w/ PearAI </h3>
+              <p style={{ color: lightGray }}>After login, the webapp should redirect you back here. If it doesn't, click again.</p>
               <CustomModelButton
                 className="m-5"
                 disabled={false}

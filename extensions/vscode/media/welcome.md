@@ -1,12 +1,6 @@
 # 👋 Welcome to PearAI
 
-## ❗️ Before you get started
-
-PearAI is currently in the left sidebar, but we recommend moving it to the right. This way it won't cover your file explorer.
-
-You can move it back at any time. If you close the sidebar, it can be re-opened with <kbd>Cmd/Ctrl</kbd> + <kbd>L</kbd>.
-
-![Move PearAI to right sidebar](./sidebar.gif)
+Welcome! Select a model on the right side to get started. You can head over to the tutorial.py tab for a quick intro on what PearAI can do, or just get started coding immediately - have fun!
 
 ## 🔑 Most important shortcuts
 

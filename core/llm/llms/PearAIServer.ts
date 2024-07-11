@@ -11,6 +11,7 @@ import { Telemetry } from "../../util/posthog.js";
 import { BaseLLM } from "../index.js";
 import { streamResponse, streamJSON } from "../stream.js";
 import { checkTokens } from "../../db/token.js";
+import { stripImages } from "../countTokens.js";
 
 class PearAIServer extends BaseLLM {
   getCredentials: (() => Promise<PearAuth | undefined>) | undefined = undefined;
@@ -65,25 +66,12 @@ class PearAIServer extends BaseLLM {
     prompt: string,
     options: CompletionOptions,
   ): AsyncGenerator<string> {
-    const args = this._convertArgs(this.collectArgs(options));
-
-    await this._countTokens(prompt, args.model, true);
-
-    const response = await this.fetch(`${SERVER_URL}/stream_complete`, {
-      method: "POST",
-      headers: await this._getHeaders(),
-      body: JSON.stringify({
-        prompt,
-        ...args,
-      }),
-    });
-
-    let completion = "";
-    for await (const value of streamJSON(response)) {
-      yield value;
-      completion += value;
+    for await (const chunk of this._streamChat(
+      [{ role: "user", content: prompt }],
+      options,
+    )) {
+      yield stripImages(chunk.content);
     }
-    this._countTokens(completion, args.model, false);
   }
 
   protected _convertMessage(message: ChatMessage) {

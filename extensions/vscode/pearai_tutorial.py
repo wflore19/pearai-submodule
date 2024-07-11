@@ -63,4 +63,4 @@ print_list(["a", "b", "c"])
 
 # endregion
 
-# Now you know some of PearAI's basic features! Enjoy, or learn more at https://trypear.ai
+# Now you know some of PearAI's basic features! Enjoy and learn more at https://trypear.ai!
