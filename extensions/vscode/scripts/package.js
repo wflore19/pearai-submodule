@@ -10,23 +10,23 @@ if (!fs.existsSync("build")) {
 }
 
 const command = isPreRelease
-  ? "npx vsce package --out ./build patch --pre-release --no-dependencies" // --yarn"
-  : "npx vsce package --out ./build patch --no-dependencies"; // --yarn";
+  ? "npx vsce package --out ./build --pre-release --no-dependencies"
+  : "npx vsce package --out ./build --no-dependencies";
 
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error: ${stderr}`);
-      throw error;
-    }
-    console.log(stdout);
+exec(command, (error, stdout, stderr) => {
+  if (error) {
+    console.error(`Error: ${stderr}`);
+    throw error;
+  }
+  console.log(stdout);
 
-    const vsixFileMatch = stdout.match(/Packaged:\s+(.*\.vsix)/);
-    if (!vsixFileMatch || !vsixFileMatch[1]) {
-      console.error("Could not determine VSIX file name from vsce output");
-      return;
-    }
-    const vsixFile = vsixFileMatch[1];
-    const vsixPath = path.resolve(vsixFile);
+  const vsixFileMatch = stdout.match(/Packaged:\s+(.*\.vsix)/);
+  if (!vsixFileMatch || !vsixFileMatch[1]) {
+    console.error("Could not determine VSIX file name from vsce output");
+    return;
+  }
+  const vsixFile = vsixFileMatch[1];
+  const vsixPath = path.resolve(vsixFile);
 
-    console.log(`VSIX package created: ${vsixPath}`);
+  console.log(`VSIX package created: ${vsixPath}`);
 });
