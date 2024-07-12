@@ -569,6 +569,21 @@ const gpt4o: ModelPackage = {
   icon: "openai.png",
 };
 
+const pearai_model: ModelPackage = {
+  title: "PearAI Server",
+  description:
+    "Experience seamless, fully-managed LLM integration with PearAI, featuring the most advanced and current best-in-market language model.",
+  params: {
+    model: "pearai-latest",
+    contextLength: 128_000,
+    title: "PearAI Server",
+    systemMessage:
+      "You are an expert software developer. You give helpful and concise responses.",
+  },
+  providerOptions: ["pearai-server"],
+  icon: "pearai.png",
+};
+
 const gpt35turbo: ModelPackage = {
   title: "GPT-3.5-Turbo",
   description:
@@ -694,19 +709,14 @@ export const PROVIDER_INFO: { [key: string]: ModelInfo } = {
     provider: "pearai-server",
     refPage: "pearai-server",
     description:
-      "Use PearAI's hosted services for convenient, fully-managed LLM integration.",
+      "Use PearAI's hosted services for convenient, fully-managed integration, with the current best-in-market language model.",
     longDescription:
-      "Eliminate the need to set up or maintain your own API key, offering unlimited* usage at subscription cost.",
+      "Eliminate the need to set up or maintain your own API key, and ensure the best experience with PearAI.",
     icon: "pearai.png",
     tags: [ModelProviderTag["Requires Login"], ModelProviderTag["Hosted"]],
     packages: [
       {
-        ...gpt4o,
-        title: "PearAI Server",
-        params: {
-          ...gpt4o.params,
-          title: "PearAI Server"
-        }
+        ...pearai_model
       }
     ],
   },

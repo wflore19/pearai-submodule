@@ -185,7 +185,7 @@ class PearAIServer extends BaseLLM {
 
   async listModels(): Promise<string[]> {
     return [
-      "gpt-4o",
+      "pearai-latest",
     ];
   }
 }

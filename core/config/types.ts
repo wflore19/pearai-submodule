@@ -574,7 +574,8 @@ declare global {
     | "starcoder-1b"
     | "starcoder-3b"
     | "starcoder2-3b"
-    | "stable-code-3b";
+    | "stable-code-3b"
+    | "pearai-latest";
   
   export interface RequestOptions {
     timeout?: number;

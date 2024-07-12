@@ -6,25 +6,6 @@ export function setupOptimizedMode(
   return {
     ...config,
     models: [
-      {
-        title: "GPT-4o (Free Trial)",
-        provider: "free-trial",
-        model: "gpt-4o",
-        systemMessage:
-          "You are an expert software developer. You give helpful and concise responses.",
-      },
-      {
-        title: "Llama3 70b (Free Trial)",
-        provider: "free-trial",
-        model: "llama3-70b",
-        systemMessage:
-          "You are an expert software developer. You give helpful and concise responses. Whenever you write a code block you include the language after the opening ticks.",
-      },
-      {
-        title: "Claude 3 Sonnet (Free Trial)",
-        provider: "free-trial",
-        model: "claude-3-sonnet-20240229",
-      },
     ],
     tabAutocompleteModel: {
       title: "Tab Autocomplete",
