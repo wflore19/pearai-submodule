@@ -213,6 +213,15 @@ export class VsCodeWebviewProtocol {
     this.on("toggleFullScreen", (msg) => {
       vscode.commands.executeCommand("pearai.toggleFullScreen");
     });
+    this.on("bigChat", (msg) => {
+      vscode.commands.executeCommand("pearai.resizeAuxiliaryBarWidth");
+    });
+    this.on("lastChat", (msg) => {
+      vscode.commands.executeCommand("pearai.loadRecentChat");
+    });
+    this.on("closeChat", (msg) => {
+      vscode.commands.executeCommand("pearai.closeChat");
+    });
 
     // IDE
     this.on("getDiff", async (msg) => {

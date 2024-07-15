@@ -483,6 +483,9 @@ const commandsMap: (
     "pearai.winResizeAuxiliaryBarWidth": () => {
       vscode.commands.executeCommand("pearai.resizeAuxiliaryBarWidth");
     },
+    "pearai.winshortcutResizeAuxiliaryBarWidth": () => {
+      vscode.commands.executeCommand("pearai.resizeAuxiliaryBarWidth");
+    },
     "pearai.macResizeAuxiliaryBarWidth": () => {
       vscode.commands.executeCommand("pearai.resizeAuxiliaryBarWidth");
     },
@@ -592,6 +595,9 @@ const commandsMap: (
     "pearai.loadRecentChat": () => {
       sidebar.webviewProtocol?.request("loadMostRecentChat", undefined);
       sidebar.webviewProtocol?.request("focusContinueInput", undefined);
+    },
+    "pearai.closeChat": () => {
+      vscode.commands.executeCommand("workbench.action.toggleAuxiliaryBar");
     },
   };
 };

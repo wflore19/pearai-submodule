@@ -3,7 +3,7 @@ import {
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 import { IndexingProgressUpdate } from "core";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -31,6 +31,11 @@ import IndexingProgressBar from "./loaders/IndexingProgressBar";
 import ProgressBar from "./loaders/ProgressBar";
 import ModelSelect from "./modelSelection/ModelSelect";
 
+// check mac or window
+const platform = navigator.userAgent.toLowerCase();
+const isMac = platform.includes('mac');
+const isWindows = platform.includes('win');
+  
 // #region Styled Components
 const FOOTER_HEIGHT = "1.8em";
 
@@ -71,9 +76,24 @@ const Footer = styled.footer`
   overflow: hidden;
 `;
 
-const GridDiv = styled.div`
+const Header = styled.header`
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  justify-content: right;
+  padding: 1px;
+  padding-top: 0;
+  padding-bottom: 0;
+  align-items: center;
+  width: calc(100% - 5px);
+  height: ${FOOTER_HEIGHT};
+
+  overflow: hidden;
+`;
+
+const GridDiv = styled.div<{ showHeader: boolean }>`
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: ${(props) => (props.showHeader ? "auto 1fr auto" : "1fr auto")};
   min-height: 100vh;
   overflow-x: visible;
 `;
@@ -93,6 +113,93 @@ const HIDE_FOOTER_ON_PAGES = [
   "/existingUserOnboarding",
   "/localOnboarding",
 ];
+
+const SHOW_SHORTCUTS_ON_PAGES = [
+  "/",
+];
+
+
+type ShortcutProps = {
+  modifiers: string[];
+  keyCode: string;
+  description: string;
+  onClick?: () => void;
+};
+
+const Shortcut = ({
+  modifiers,
+  keyCode,
+  description,
+  onClick,
+}: ShortcutProps) => {
+  const modifierString = modifiers.join(' + ');
+
+  return (
+    <div
+      className='flex gap-2 items-center text-sm text-slate-400 rounded-lg px-1 cursor-pointer select-none m-0 mx-[2px] border-solid shortcut-border border-[1px] p-[1px]'
+      onClick={onClick}
+    >
+      <span className='text-[12px]'>{description}</span>
+      <div
+        className='monaco-keybinding'
+        aria-label={`${modifierString}+${keyCode}`}
+      >
+        {modifiers.map((mod, index) => (
+          <span className='monaco-keybinding-key' key={index}>
+            {mod}
+          </span>
+        ))}
+        <span className='monaco-keybinding-key'>{keyCode}</span>
+      </div>
+    </div>
+  );
+};
+
+const ShortcutContainer = () => {
+  const shortcutContainerRef = useRef<HTMLDivElement>(null);
+  const [modifier] = useState(isMac ? 'Cmd' : 'Ctrl');
+
+
+  useEffect(() => {
+    const shortcutContainer = shortcutContainerRef.current;
+    if (shortcutContainer) {
+      const handleWheel = (event: WheelEvent) => {
+        if (event.deltaY !== 0) {
+          event.preventDefault();
+          shortcutContainer.scrollLeft += event.deltaY;
+        }
+      };
+
+      shortcutContainer.addEventListener('wheel', handleWheel);
+      return () => {
+        shortcutContainer.removeEventListener('wheel', handleWheel);
+      };
+    }
+  }, []);
+
+  const shortcuts = [
+    { modifiers: [modifier, 'Shift'], keyCode: 'L', description: 'Add' },
+    { modifiers: [modifier], keyCode: '0', description: 'Last', onClick: () => postToIde('lastChat', undefined) },
+    { modifiers: [modifier], keyCode: '[', description: 'Big', onClick: () => postToIde('bigChat', undefined) },
+    { modifiers: [modifier], keyCode: ';', description: 'Close', onClick: () => postToIde('closeChat', undefined) },
+  ];
+
+  return (
+    <div
+      ref={shortcutContainerRef}
+      className='flex overflow-x-auto whitespace-nowrap no-scrollbar'
+    >
+      {shortcuts.map((shortcut, index) => (
+          <Shortcut
+            modifiers={shortcut.modifiers}
+            keyCode={shortcut.keyCode}
+            description={shortcut.description}
+          />
+      ))}
+    </div>
+  );
+};
+
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -215,10 +322,10 @@ const Layout = () => {
     <LayoutTopDiv>
       <div
         style={{
-          scrollbarGutter: "stable both-edges",
-          minHeight: "100%",
-          display: "grid",
-          gridTemplateRows: "1fr auto",
+          scrollbarGutter: 'stable both-edges',
+          minHeight: '100%',
+          display: 'grid',
+          gridTemplateRows: '1fr auto',
         }}
       >
         <TextDialog
@@ -232,12 +339,19 @@ const Layout = () => {
           message={dialogMessage}
         />
 
-        <GridDiv>
+        <GridDiv
+          showHeader={SHOW_SHORTCUTS_ON_PAGES.includes(location.pathname)}
+        >
+          {SHOW_SHORTCUTS_ON_PAGES.includes(location.pathname) && (
+            <Header>
+              <ShortcutContainer />
+            </Header>
+          )}
           <Outlet />
-          <DropdownPortalDiv id="model-select-top-div"></DropdownPortalDiv>
+          <DropdownPortalDiv id='model-select-top-div'></DropdownPortalDiv>
           {HIDE_FOOTER_ON_PAGES.includes(location.pathname) || (
             <Footer>
-              <div className="mr-auto flex gap-2 items-center">
+              <div className='mr-auto flex gap-2 items-center'>
                 {/* {localStorage.getItem("ide") === "jetbrains" ||
                 localStorage.getItem("hideFeature") === "true" || (
                   <SparklesIcon
@@ -267,10 +381,10 @@ const Layout = () => {
                   />
                 )} */}
                 <ModelSelect />
-                {indexingState.status !== "indexing" && // Would take up too much space together with indexing progress
-                  defaultModel?.provider === "free-trial" && (
+                {indexingState.status !== 'indexing' && // Would take up too much space together with indexing progress
+                  defaultModel?.provider === 'free-trial' && (
                     <ProgressBar
-                      completed={parseInt(localStorage.getItem("ftc") || "0")}
+                      completed={parseInt(localStorage.getItem('ftc') || '0')}
                       total={ftl()}
                     />
                   )}
@@ -280,25 +394,25 @@ const Layout = () => {
                 )}
               </div>
               <HeaderButtonWithText
-                text="Help"
+                text='Help'
                 onClick={() => {
-                  if (location.pathname === "/help") {
-                    navigate("/");
+                  if (location.pathname === '/help') {
+                    navigate('/');
                   } else {
-                    navigate("/help");
+                    navigate('/help');
                   }
                 }}
               >
-                <QuestionMarkCircleIcon width="1.4em" height="1.4em" />
+                <QuestionMarkCircleIcon width='1.4em' height='1.4em' />
               </HeaderButtonWithText>
               <HeaderButtonWithText
                 onClick={() => {
                   // navigate("/settings");
-                  postToIde("openConfigJson", undefined);
+                  postToIde('openConfigJson', undefined);
                 }}
-                text="Configure PearAI"
+                text='Configure PearAI'
               >
-                <Cog6ToothIcon width="1.4em" height="1.4em" />
+                <Cog6ToothIcon width='1.4em' height='1.4em' />
               </HeaderButtonWithText>
             </Footer>
           )}
@@ -321,10 +435,11 @@ const Layout = () => {
       </div>
       <div
         style={{ fontSize: `${getFontSize() - 4}px` }}
-        id="tooltip-portal-div"
+        id='tooltip-portal-div'
       />
     </LayoutTopDiv>
   );
 };
 
 export default Layout;
+
