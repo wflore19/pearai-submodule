@@ -37,6 +37,7 @@ const isMac = platform.includes('mac');
 const isWindows = platform.includes('win');
   
 // #region Styled Components
+const HEADER_HEIGHT = "1.55rem";
 const FOOTER_HEIGHT = "1.8em";
 
 const LayoutTopDiv = styled(CustomScrollbarDiv)`
@@ -78,16 +79,10 @@ const Footer = styled.footer`
 
 const Header = styled.header`
   display: flex;
-  flex-direction: row;
-  gap: 2px;
   justify-content: right;
-  padding: 1px;
-  padding-top: 0;
-  padding-bottom: 0;
-  align-items: center;
-  width: calc(100% - 5px);
-  height: ${FOOTER_HEIGHT};
-
+  padding: 1px 1px 0 1px;
+  width: calc(100% - 8px);
+  height: ${HEADER_HEIGHT};
   overflow: hidden;
 `;
 
@@ -136,7 +131,7 @@ const Shortcut = ({
 
   return (
     <div
-      className='flex gap-2 items-center text-sm text-slate-400 rounded-lg px-1 cursor-pointer select-none m-0 mx-[2px] border-solid shortcut-border border-[1px] p-[1px]'
+      className='flex gap-1 items-center text-sm text-slate-400 rounded-lg px-1 cursor-pointer select-none m-0 mx-[2px] border-solid shortcut-border border-[1px]'
       onClick={onClick}
     >
       <span className='text-[12px]'>{description}</span>
@@ -187,7 +182,7 @@ const ShortcutContainer = () => {
   return (
     <div
       ref={shortcutContainerRef}
-      className='flex overflow-x-auto whitespace-nowrap no-scrollbar'
+      className='flex overflow-x-auto whitespace-nowrap no-scrollbar h-[1.55rem]'
     >
       {shortcuts.map((shortcut, index) => (
           <Shortcut
