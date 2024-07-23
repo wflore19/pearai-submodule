@@ -199,7 +199,7 @@ const commandsMap: (
       await vscode.env.openExternal(
         await vscode.env.asExternalUri(
           vscode.Uri.parse(
-            `https://trypear.ai/signin?redirect=${callbackUri.toString()}`, // Change to localhost if running locally
+            `https://trypear.ai/signin?callback=${callbackUri.toString()}`, // Change to localhost if running locally
           ),
         ),
       );
