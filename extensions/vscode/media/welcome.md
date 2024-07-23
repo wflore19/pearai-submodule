@@ -1,15 +1,23 @@
 # 👋 Welcome to PearAI
 
-Welcome! Select a model on the right side to get started. You can head over to the tutorial.py tab for a quick intro on what PearAI can do, or just get started coding immediately - have fun!
+Welcome! Select a model on the right side to get started. 
 
-## 🔑 Most important shortcuts
+**If you want to take a quick tutorial on what PearAI can do you can head over to <span style="font-size: 1.2em;">[tutorial.py](../pearai_tutorial.py)</span>.**
 
-> If you'd prefer different keys, these shortcuts can be customized in VS Code settings.
 
-<kbd>Cmd/Ctrl</kbd> + <kbd>L</kbd> = Select code
+If you want to skip the tutorial you can just start coding immediately - Happy Coding!
 
-<kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd> = Select code for follow-up
+## 🔑 Important Shortcuts
 
-<kbd>Cmd/Ctrl</kbd> + <kbd>I</kbd> = Quick edit
+> If you'd prefer different keys, these shortcuts can be customized in PearAI settings.
 
-<kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> = Automatically debug terminal
+| Description                        | Keybinds                                    |
+|------------------------------------|---------------------------------------------|
+| Select Code + New Session          | <kbd>Cmd/Ctrl</kbd> + <kbd>L</kbd>          |
+| Close Pear Chat                    | <kbd>Cmd/Ctrl</kbd> + <kbd>;</kbd>          |
+| Toggle Enlarged Chat               | <kbd>Cmd/Ctrl</kbd> + <kbd>[</kbd>          |
+| Add Selected Code to Current Chat  | <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd> |
+| Inline Prompting                   | <kbd>Cmd/Ctrl</kbd> + <kbd>I</kbd>          |
+| Bring Latest Terminal Error to Chat| <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> |
+| Toggle History                     | <kbd>Cmd/Ctrl</kbd> + <kbd>O</kbd>          |
+| Go To Previous Chat                | <kbd>Cmd/Ctrl</kbd> + <kbd>0</kbd>          |
