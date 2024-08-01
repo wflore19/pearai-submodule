@@ -1,6 +1,6 @@
 # 🍐 Contributing to PearAI
 
-## 🌐 **For how to setup, build, and run PearAI, please visit [PearAI-App Contributing](https://github.com/pearai/pearai-app) for the main guide!**
+## 🌐 **For how to setup, build, and run PearAI, please visit [PearAI-App Contributing](https://github.com/trypear/pearai-app/blob/main/CONTRIBUTING.md) for the main guide!**
 
 - [✨ Writing Slash Commands](#-writing-slash-commands)
 - [📜 Writing Context Providers](#-writing-context-providers)
