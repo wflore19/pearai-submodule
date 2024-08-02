@@ -172,12 +172,14 @@ const ShortcutContainer = () => {
     }
   }, []);
 
-  const shortcuts = [
-    { modifiers: [modifier, 'Shift'], keyCode: 'L', description: 'Add' },
-    { modifiers: [modifier], keyCode: '0', description: 'Last', onClick: () => postToIde('lastChat', undefined) },
-    { modifiers: [modifier], keyCode: '[', description: 'Big', onClick: () => postToIde('bigChat', undefined) },
-    { modifiers: [modifier], keyCode: ';', description: 'Close', onClick: () => postToIde('closeChat', undefined) },
-  ];
+const shortcuts = [
+  { modifiers: [modifier], keyCode: '[', description: 'Big', onClick: () => postToIde('bigChat', undefined) },
+  { modifiers: [modifier], keyCode: '0', description: 'Prev', onClick: () => postToIde('lastChat', undefined) },
+  { modifiers: [modifier], keyCode: 'O', description: 'History' },
+  { modifiers: [modifier], keyCode: ';', description: 'Close', onClick: () => postToIde('closeChat', undefined) },
+  { modifiers: [modifier, 'Shift'], keyCode: 'L', description: 'Add' },
+];
+
 
   return (
     <div
