@@ -116,6 +116,7 @@ export class VsCodeWebviewProtocol {
             "Error handling webview message: " +
               JSON.stringify({ msg }, null, 2),
           );
+          const UNAUTHORIZED_ERROR_CODE = "401";
 
           let message = e.message;
           if (e.cause) {
@@ -127,8 +128,29 @@ export class VsCodeWebviewProtocol {
               message = `The request failed with "${e.cause.name}": ${e.cause.message}. If you're having trouble setting up Continue, please see the troubleshooting guide for help.`;
             }
           }
-
-          if (message.includes("https://proxy-server")) {
+          else if (message.includes(UNAUTHORIZED_ERROR_CODE)) {
+            vscode.window
+              .showErrorMessage(
+                message,
+                'Login To PearAI',
+                'Show Logs',
+              )
+              .then((selection) => {
+                if (selection === 'Login To PearAI') {
+                  // Redirect to auth login URL
+                  vscode.env.openExternal(
+                    vscode.Uri.parse(
+                      'https://trypear.ai/signin?callback=pearai://pearai.pearai/auth',
+                    ),
+                  );
+                } else if (selection === 'Show Logs') {
+                  vscode.commands.executeCommand(
+                    'workbench.action.toggleDevTools',
+                  );
+                }
+              });
+          }
+          else if (message.includes("https://proxy-server")) {
             message = message.split("\n").slice(1).join("\n").trim();
             try {
               message = JSON.parse(message).message ?? message;
