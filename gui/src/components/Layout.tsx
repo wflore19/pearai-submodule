@@ -177,7 +177,7 @@ const shortcuts = [
   { modifiers: [modifier], keyCode: '0', description: 'Prev', onClick: () => postToIde('lastChat', undefined) },
   { modifiers: [modifier], keyCode: 'O', description: 'History' },
   { modifiers: [modifier], keyCode: ';', description: 'Close', onClick: () => postToIde('closeChat', undefined) },
-  { modifiers: [modifier, 'Shift'], keyCode: 'L', description: 'Add' },
+  { modifiers: [modifier, 'Shift'], keyCode: 'L', description: 'Add Selected' },
 ];
 
 
