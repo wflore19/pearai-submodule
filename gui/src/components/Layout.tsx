@@ -12,6 +12,7 @@ import {
   defaultBorderRadius,
   vscForeground,
   vscInputBackground,
+  vscBackground,
 } from ".";
 import { useWebviewListener } from "../hooks/useWebviewListener";
 import { defaultModelSelector } from "../redux/selectors/modelSelectors";
@@ -78,9 +79,13 @@ const Footer = styled.footer`
 `;
 
 const Header = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background-color: ${vscBackground};
   display: flex;
   justify-content: right;
-  padding: 1px 1px 0 1px;
+  padding: 1px;
   width: calc(100% - 8px);
   height: ${HEADER_HEIGHT};
   overflow: hidden;
