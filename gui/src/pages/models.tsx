@@ -1,16 +1,15 @@
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import _ from "lodash";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { defaultBorderRadius, lightGray, vscBackground } from "../components";
 import ModelCard from "../components/modelSelection/ModelCard";
-import Toggle from "../components/modelSelection/Toggle";
 import { useNavigationListener } from "../hooks/useNavigationListener";
 import { setDefaultModel } from "../redux/slices/stateSlice";
 import { postToIde } from "../util/ide";
-import { MODEL_INFO, PROVIDER_INFO } from "../util/modelData";
+import { MODEL_INFO, PROVIDER_HOME, OTHER_PROVIDERS } from "../util/modelData";
 import { CustomModelButton } from "./modelconfig";
 
 const IntroDiv = styled.div`
@@ -32,9 +31,27 @@ const GridDiv = styled.div`
 function Models() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
   useNavigationListener();
 
-  const [providersSelected, setProvidersSelected] = React.useState(true);
+  const [showOtherProviders, setShowOtherProviders] = useState(
+    location.state?.showOtherProviders ?? false
+  );
+
+  const handleOtherClick = () => setShowOtherProviders(true);
+
+  const handleBackArrowClick = () => {
+    if (location.state?.referrer) {
+      navigate(location.state.referrer);
+    }
+    else if (showOtherProviders) {
+      setShowOtherProviders(false);
+    }  
+    else {
+      navigate("/");
+    }
+  };
 
   return (
     <div>
@@ -49,112 +66,56 @@ function Models() {
         <ArrowLeftIcon
           width="1.2em"
           height="1.2em"
-          onClick={() => navigate("/")}
+          onClick={handleBackArrowClick}
           className="inline-block ml-4 cursor-pointer"
         />
-        <h3 className="text-lg font-bold m-2 inline-block">Add new model</h3>
+        <h3 className="text-lg font-bold m-2 inline-block">Add Model</h3>
       </div>
       <br />
-      <Toggle
-        selected={providersSelected}
-        optionOne={"Providers"}
-        optionTwo={"Models"}
-        onClick={() => {
-          setProvidersSelected((prev) => !prev);
-        }}
-      ></Toggle>
-      <IntroDiv>
-        Welcome! Get set up by choosing:
-        <ul>
-          <li>
-            a provider (the service used to run the LLM, e.g. Ollama,
-            TogetherAI) and
-          </li>
-          <li>a model (the LLM being run, e.g. GPT-4, CodeLlama).</li>
-        </ul>
+      <IntroDiv style={{ textAlign: "center" }}>
+        To add a model, select one of the options below:
       </IntroDiv>
-      {providersSelected ? (
-        <GridDiv>
-          {Object.entries(PROVIDER_INFO).map(([name, modelInfo]) => (
+      <GridDiv>
+        {!showOtherProviders && (
+          <>
             <ModelCard
+              title={PROVIDER_HOME["pearaiserver"].title}
+              description={PROVIDER_HOME["pearaiserver"].description}
+              tags={PROVIDER_HOME["pearaiserver"].tags}
+              icon={PROVIDER_HOME["pearaiserver"].icon}
+              onClick={() => navigate(`/modelconfig/pearaiserver`)}
+            />
+            <ModelCard
+              title={PROVIDER_HOME["other"].title}
+              description={PROVIDER_HOME["other"].description}
+              tags={PROVIDER_HOME["other"].tags}
+              icon={PROVIDER_HOME["other"].icon}
+              onClick={handleOtherClick}
+            />
+          </>
+        )}
+        {showOtherProviders &&
+          Object.entries(OTHER_PROVIDERS).map(([name, modelInfo]) => (
+            <ModelCard
+              key={name}
               title={modelInfo.title}
               description={modelInfo.description}
               tags={modelInfo.tags}
               icon={modelInfo.icon}
-              refUrl={`https://trypear.ai/reference/Model%20Providers/${
-                modelInfo.refPage || modelInfo.provider.toLowerCase()
-              }`}
-              onClick={(e) => {
-                navigate(`/modelconfig/${name}`);
-              }}
+              onClick={() => navigate(`/modelconfig/${name}`, {
+                state: { referrer: location.state?.referrer }
+              })}
             />
           ))}
-        </GridDiv>
-      ) : (
-        <GridDiv>
-          {MODEL_INFO.map((pkg) => {
-            if (typeof pkg === "string") {
-              return (
-                <div className="-my-8 grid grid-cols-[auto_1fr] w-full items-center">
-                  <h3 className="">{pkg}</h3>
-                  <hr
-                    className="ml-2"
-                    style={{
-                      height: "0px",
-                      width: "calc(100% - 16px)",
-                      color: lightGray,
-                      border: `1px solid ${lightGray}`,
-                      borderRadius: "2px",
-                    }}
-                  ></hr>
-                </div>
-              );
-            } else {
-              return (
-                <ModelCard
-                  title={pkg.title}
-                  description={pkg.description}
-                  tags={pkg.tags}
-                  icon={pkg.icon}
-                  dimensions={pkg.dimensions}
-                  providerOptions={pkg.providerOptions}
-                  onClick={(e, dimensionChoices, selectedProvider) => {
-                    const model = {
-                      ...pkg.params,
-                      ..._.merge(
-                        {},
-                        ...(pkg.dimensions?.map((dimension, i) => {
-                          if (!dimensionChoices?.[i]) return {};
-                          return {
-                            ...dimension.options[dimensionChoices[i]],
-                          };
-                        }) || []),
-                      ),
-                      provider: PROVIDER_INFO[selectedProvider].provider,
-                    };
-                    postToIde("config/addModel", { model });
-                    dispatch(
-                      setDefaultModel({ title: model.title, force: true }),
-                    );
-                    navigate("/");
-                  }}
-                />
-              );
-            }
-          })}
-        </GridDiv>
-      )}
-
+      </GridDiv>
       <div style={{ padding: "8px" }}>
         <hr style={{ color: lightGray, border: `1px solid ${lightGray}` }} />
         <p style={{ color: lightGray }}>
-          OR choose from other providers / models by editing config.json.
+          Or edit manually in config.json:
         </p>
         <CustomModelButton
           disabled={false}
-          onClick={(e) => {
-            postToIde("openConfigJson", undefined);
-          }}
+          onClick={() => postToIde("openConfigJson", undefined)}
         >
           <h3 className="text-center my-2">Open config.json</h3>
         </CustomModelButton>

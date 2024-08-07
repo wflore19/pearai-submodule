@@ -3,7 +3,7 @@ import _ from "lodash";
 import { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import {
   Input,
@@ -19,7 +19,8 @@ import { postToIde } from "../util/ide";
 import {
   MODEL_PROVIDER_TAG_COLORS,
   ModelInfo,
-  PROVIDER_INFO,
+  PROVIDER_HOME,
+  OTHER_PROVIDERS,
   updatedObj,
 } from "../util/modelData";
 
@@ -64,12 +65,19 @@ function ModelConfig() {
 
   useEffect(() => {
     if (modelName) {
-      setModelInfo(PROVIDER_INFO[modelName]);
+      const info = PROVIDER_HOME[modelName] || OTHER_PROVIDERS[modelName];
+      if (info) {
+        setModelInfo(info);
+      } else {
+        console.warn(`No model info found for ${modelName}`);
+      }
     }
   }, [modelName]);
-
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const referrer = location.state?.referrer;
 
   const disableModelCards = useCallback(() => {
     return (
@@ -134,7 +142,13 @@ function ModelConfig() {
           <ArrowLeftIcon
             width="1.2em"
             height="1.2em"
-            onClick={() => navigate("/models")}
+            onClick={() => {
+              if (referrer) {
+                navigate(referrer);
+              } else {
+                navigate("/models");
+              }
+            }}
             className="inline-block ml-4 cursor-pointer"
           />
           <h3 className="text-lg font-bold m-2 inline-block">
@@ -297,8 +311,7 @@ function ModelConfig() {
                     }}
                   />
                   <p style={{ color: lightGray }}>
-                    OR choose from other providers / models by editing
-                    config.json.
+                    Or edit manually in config.json.
                   </p>
                   <CustomModelButton
                     disabled={false}

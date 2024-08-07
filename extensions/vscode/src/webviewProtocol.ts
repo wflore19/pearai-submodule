@@ -1,10 +1,7 @@
 import { ContextItemId, IDE } from "core";
 import { ConfigHandler } from "core/config/handler";
 import {
-  setupLocalAfterFreeTrial,
-  setupLocalMode,
-  setupOptimizedExistingUserMode,
-  setupOptimizedMode,
+  setupConfig,
 } from "core/config/onboarding";
 import { addModel, addOpenAIKey, deleteModel } from "core/config/util";
 import { indexDocs } from "core/indexing/docs";
@@ -681,13 +678,7 @@ export class VsCodeWebviewProtocol {
         return;
       }
       editConfigJson(
-        mode === "local"
-          ? setupLocalMode
-          : mode === "localAfterFreeTrial"
-            ? setupLocalAfterFreeTrial
-            : mode === "optimized"
-              ? setupOptimizedMode
-              : setupOptimizedExistingUserMode,
+        setupConfig
       );
       this.configHandler.reloadConfig();
     });

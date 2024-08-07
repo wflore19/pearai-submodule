@@ -1,5 +1,5 @@
 """
-Welcome to PearAI! This is a 1 minute tutorial.
+Welcome to a 1 minute tutorial for PearAI!
 
 You can click the gray buttons, starting with "Highlight the function" to follow along.
 """
