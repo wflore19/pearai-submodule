@@ -1,9 +1,9 @@
-import { ConfigHandler } from "core/config/handler";
-import { pruneLinesFromBottom, pruneLinesFromTop } from "core/llm/countTokens";
-import { getMarkdownLanguageTagForFile } from "core/util";
-import { streamDiffLines } from "core/util/verticalEdit";
-import * as vscode from "vscode";
-import { VerticalPerLineDiffHandler } from "./handler";
+import { ConfigHandler } from 'core/config/handler';
+import { pruneLinesFromBottom, pruneLinesFromTop } from 'core/llm/countTokens';
+import { getMarkdownLanguageTagForFile } from 'core/util';
+import { streamDiffLines } from 'core/util/verticalEdit';
+import * as vscode from 'vscode';
+import { VerticalPerLineDiffHandler } from './handler';
 
 export interface VerticalDiffCodeLens {
   start: number;
@@ -94,7 +94,7 @@ export class VerticalPerLineDiffManager {
       this.filepathToHandler.delete(filepath);
     }
 
-    vscode.commands.executeCommand("setContext", "pearai.diffVisible", false);
+    vscode.commands.executeCommand('setContext', 'pearai.diffVisible', false);
   }
 
   acceptRejectVerticalDiffBlock(
@@ -110,7 +110,7 @@ export class VerticalPerLineDiffManager {
       filepath = activeEditor.document.uri.fsPath;
     }
 
-    if (typeof index === "undefined") {
+    if (typeof index === 'undefined') {
       index = 0;
     }
 
@@ -143,7 +143,7 @@ export class VerticalPerLineDiffManager {
     modelTitle: string | undefined,
     onlyOneInsertion?: boolean,
   ) {
-    vscode.commands.executeCommand("setContext", "pearai.diffVisible", true);
+    vscode.commands.executeCommand('setContext', 'pearai.diffVisible', true);
 
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -205,11 +205,7 @@ export class VerticalPerLineDiffManager {
       editor.selection.active,
     );
 
-    vscode.commands.executeCommand(
-      "setContext",
-      "pearai.streamingDiff",
-      true,
-    );
+    vscode.commands.executeCommand('setContext', 'pearai.streamingDiff', true);
 
     try {
       await diffHandler.run(
@@ -224,12 +220,24 @@ export class VerticalPerLineDiffManager {
         ),
       );
     } catch (e) {
-      console.error("Error streaming diff:", e);
-      vscode.window.showErrorMessage(`Error streaming diff: ${e}`);
+      vscode.window
+        .showInformationMessage(
+          `PearAI access requires login: ${e}`,
+          'Login to PearAI',
+        )
+        .then((selection) => {
+          if (selection === 'Login to PearAI') {
+            vscode.env.openExternal(
+              vscode.Uri.parse(
+                'https://trypear.ai/signin?callback=pearai://pearai.pearai/auth',
+              ),
+            );
+          }
+        });
     } finally {
       vscode.commands.executeCommand(
-        "setContext",
-        "pearai.streamingDiff",
+        'setContext',
+        'pearai.streamingDiff',
         false,
       );
     }
