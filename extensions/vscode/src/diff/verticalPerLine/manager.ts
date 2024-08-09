@@ -219,10 +219,10 @@ export class VerticalPerLineDiffManager {
           onlyOneInsertion,
         ),
       );
-    } catch (e) {
+    } catch (error) {
       vscode.window
-        .showInformationMessage(
-          `PearAI access requires login: ${e}`,
+        .showErrorMessage(
+          `PearAI access requires login: ${(error as Error).message}`,
           'Login to PearAI',
         )
         .then((selection) => {
