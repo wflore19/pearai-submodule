@@ -222,7 +222,7 @@ export class VerticalPerLineDiffManager {
     } catch (error) {
       vscode.window
         .showErrorMessage(
-          `PearAI access requires login: ${(error as Error).message}`,
+          `PearAI access requires login: Fetch Error: Invalid response body while trying to fetch PearAI Server`,
           'Login to PearAI',
         )
         .then((selection) => {
