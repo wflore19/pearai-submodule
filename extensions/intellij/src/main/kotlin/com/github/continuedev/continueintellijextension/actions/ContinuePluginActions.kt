@@ -71,7 +71,7 @@ class RejectDiffAction : AnAction() {
     private var textArea: JTextArea? = null
      init {
          init()
-         title = "Continue Quick Input"
+         title = "PearAI Quick Input"
      }
 
      override fun getPreferredFocusedComponent(): JComponent? {
@@ -146,7 +146,7 @@ class QuickTextEntryAction : AnAction() {
              val project = e.project
              if (project != null) {
                  val toolWindowManager = ToolWindowManager.getInstance(project)
-                 val toolWindow = toolWindowManager.getToolWindow("Continue")
+                 val toolWindow = toolWindowManager.getToolWindow("PearAI")
 
                  if (toolWindow != null) {
                      if (!toolWindow.isVisible) {
@@ -172,22 +172,7 @@ class ViewLogsAction : AnAction() {
     }
 }
 
-class ToggleAuxiliaryBarAction : AnAction() {
-    override fun actionPerformed(e: AnActionEvent) {
-        val project = e.project ?: return
-        val toolWindowManager = ToolWindowManager.getInstance(project)
-        val toolWindow = toolWindowManager.getToolWindow("Continue")
 
-        if (toolWindow != null) {
-            if (toolWindow.isVisible) {
-                toolWindow.component.transferFocus()
-                toolWindow.hide(null)
-            } else {
-                toolWindow.activate(null)
-            }
-        }
-    }
-}
 
 class FocusContinueInputWithoutClearAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {

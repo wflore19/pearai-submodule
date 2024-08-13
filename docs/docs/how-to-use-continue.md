@@ -1,10 +1,10 @@
 ---
-title: 🧑‍🎓 How to use Continue
-description: Using LLMs as you code with Continue
+title: 🧑‍🎓 How to use PearAI
+description: Using LLMs as you code with PearAI
 keywords: [how to, edit, refactor, boilerplate, context]
 ---
 
-# 🧑‍🎓 How to use Continue
+# 🧑‍🎓 How to use PearAI
 
 ## Easily understand code sections
 
