@@ -219,21 +219,29 @@ export class VerticalPerLineDiffManager {
           onlyOneInsertion,
         ),
       );
-    } catch (error) {
-      vscode.window
-        .showErrorMessage(
-          `PearAI access requires login: Fetch Error: Invalid response body while trying to fetch PearAI Server`,
-          'Login to PearAI',
-        )
-        .then((selection) => {
-          if (selection === 'Login to PearAI') {
-            vscode.env.openExternal(
-              vscode.Uri.parse(
-                'https://trypear.ai/signin?callback=pearai://pearai.pearai/auth',
-              ),
-            );
-          }
-        });
+    } catch (error: any) {
+      console.error(`Error streaming diff: ${error.message}`);
+
+      if (error.message.includes('401')) {
+        vscode.window
+          .showErrorMessage(
+            `PearAI access requires login: Fetch Error: Invalid response body while trying to fetch PearAI Server`,
+            'Login to PearAI',
+          )
+          .then((selection) => {
+            if (selection === 'Login to PearAI') {
+              vscode.env.openExternal(
+                vscode.Uri.parse(
+                  'https://trypear.ai/signin?callback=pearai://pearai.pearai/auth',
+                ),
+              );
+            }
+          });
+      } else {
+        vscode.window.showErrorMessage(
+          `Error streaming diff: ${error.message}`,
+        );
+      }
     } finally {
       vscode.commands.executeCommand(
         'setContext',
