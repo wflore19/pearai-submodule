@@ -1,23 +1,27 @@
 import {
   ArrowUturnLeftIcon,
   BarsArrowDownIcon,
+  CubeIcon,
   HandThumbDownIcon,
   HandThumbUpIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 import { ChatHistoryItem } from "core";
-import { stripImages } from "core/llm/countTokens";
-import { useEffect, useState } from "react";
+import { stripImages } from "core/llm/images";
+import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {
   defaultBorderRadius,
   lightGray,
   vscBackground,
+  vscButtonBackground,
   vscInputBackground,
 } from "..";
+import { IdeMessengerContext } from "../../context/IdeMessenger";
+import useUIConfig from "../../hooks/useUIConfig";
 import { RootState } from "../../redux/store";
 import { getFontSize } from "../../util";
-import { postToIde } from "../../util/ide";
 import HeaderButtonWithText from "../HeaderButtonWithText";
 import { CopyButton } from "../markdown/CopyButton";
 import StyledMarkdownPreview from "../markdown/StyledMarkdownPreview";
@@ -33,56 +37,43 @@ interface StepContainerProps {
   isFirst: boolean;
   isLast: boolean;
   index: number;
+  modelTitle?: string;
 }
 
-// #region styled components
-
-const ButtonsDiv = styled.div`
-  display: flex;
-  gap: 2px;
-  align-items: center;
-  background-color: ${vscBackground};
-  box-shadow: 1px 1px 10px ${vscBackground};
-  border-radius: ${defaultBorderRadius};
-  z-index: 100;
-  position: absolute;
-  right: 8px;
-  top: 16px;
-  height: 0;
-`;
-
 const ContentDiv = styled.div<{ isUserInput: boolean; fontSize?: number }>`
-  padding: 2px;
-  padding-right: 0px;
+  padding: 4px 0px 8px 0px;
   background-color: ${(props) =>
     props.isUserInput ? vscInputBackground : vscBackground};
   font-size: ${(props) => props.fontSize || getFontSize()}px;
-  border-radius: ${defaultBorderRadius};
+  // border-radius: ${defaultBorderRadius};
   overflow: hidden;
 `;
-
-// #endregion
 
 function StepContainer(props: StepContainerProps) {
   const [isHovered, setIsHovered] = useState(false);
   const isUserInput = props.item.message.role === "user";
   const active = useSelector((store: RootState) => store.state.active);
+  const ideMessenger = useContext(IdeMessengerContext);
 
   const [feedback, setFeedback] = useState<boolean | undefined>(undefined);
+
+  const sessionId = useSelector((store: RootState) => store.state.sessionId);
 
   const sendFeedback = (feedback: boolean) => {
     setFeedback(feedback);
     if (props.item.promptLogs?.length) {
       for (const promptLog of props.item.promptLogs) {
-        postToIde("devdata/log", {
+        ideMessenger.post("devdata/log", {
           tableName: "chat",
-          data: { ...promptLog, feedback },
+          data: { ...promptLog, feedback, sessionId },
         });
       }
     }
   };
 
   const [truncatedEarly, setTruncatedEarly] = useState(false);
+
+  const uiConfig = useUIConfig();
 
   useEffect(() => {
     if (!active) {
@@ -118,17 +109,42 @@ function StepContainer(props: StepContainerProps) {
           isUserInput={isUserInput}
           fontSize={getFontSize()}
         >
-          <StyledMarkdownPreview
-            source={stripImages(props.item.message.content)}
-            showCodeBorder={true}
-          />
+          {uiConfig?.displayRawMarkdown ? (
+            <pre
+              className="whitespace-pre-wrap break-words p-4 max-w-full overflow-x-auto"
+              style={{ fontSize: getFontSize() - 2 }}
+            >
+              {stripImages(props.item.message.content)}
+            </pre>
+          ) : (
+            <StyledMarkdownPreview
+              source={stripImages(props.item.message.content)}
+              showCodeBorder={true}
+            />
+          )}
         </ContentDiv>
-        <div className="h-2"></div>
         {(isHovered || typeof feedback !== "undefined") && !active && (
           <div
-            className="flex items-center gap-2 right-2 absolute -bottom-1"
-            style={{ zIndex: 200 }}
+            className="flex gap-1 absolute -bottom-2 right-0"
+            style={{
+              zIndex: 200,
+              color: lightGray,
+              fontSize: getFontSize() - 3,
+            }}
           >
+            {props.modelTitle && (
+              <div className="flex items-center">
+                <CubeIcon className="w-3 h-4 mr-1 flex-shrink-0" />
+                {props.modelTitle}
+                <div
+                  style={{
+                    backgroundColor: vscButtonBackground,
+                    borderColor: vscButtonBackground,
+                  }}
+                  className="w-px h-full ml-3 mr-1"
+                />
+              </div>
+            )}
             {truncatedEarly && (
               <HeaderButtonWithText
                 text="Continue generation"
@@ -160,38 +176,16 @@ function StepContainer(props: StepContainerProps) {
                 height="1.2em"
               />
             </HeaderButtonWithText>
-            {feedback === false || (
-              <HeaderButtonWithText text="Helpful">
-                <HandThumbUpIcon
-                  className={
-                    "cursor-pointer hover:text-green-500" +
-                    (feedback === true ? " text-green-500" : "")
-                  }
-                  width="1.2em"
-                  height="1.2em"
-                  color={lightGray}
-                  onClick={() => {
-                    sendFeedback(true);
-                  }}
-                />
-              </HeaderButtonWithText>
-            )}
-            {feedback === true || (
-              <HeaderButtonWithText text="Unhelpful">
-                <HandThumbDownIcon
-                  className={
-                    "cursor-pointer hover:text-red-500" +
-                    (feedback === false ? " text-red-500" : "")
-                  }
-                  width="1.2em"
-                  height="1.2em"
-                  color={lightGray}
-                  onClick={() => {
-                    sendFeedback(false);
-                  }}
-                />
-              </HeaderButtonWithText>
-            )}
+            <HeaderButtonWithText text="Delete Message">
+              <TrashIcon
+                color={lightGray}
+                width="1.2em"
+                height="1.2em"
+                onClick={() => {
+                  props.onDelete();
+                }}
+              />
+            </HeaderButtonWithText>
           </div>
         )}
       </div>
