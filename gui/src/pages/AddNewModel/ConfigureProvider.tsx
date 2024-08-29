@@ -21,6 +21,7 @@ import { setDefaultModel } from "../../redux/slices/stateSlice";
 import { updatedObj } from "../../util";
 import type { ProviderInfo } from "./configs/providers";
 import { providers } from "./configs/providers";
+import { useWebviewListener } from "../../hooks/useWebviewListener";
 
 const GridDiv = styled.div`
   display: grid;
@@ -73,6 +74,34 @@ function ConfigureProvider() {
       setModelInfo(providers[providerName]);
     }
   }, [providerName]);
+
+  // this runs when user successfully logins pearai
+  useWebviewListener(
+    "addPearAIModel",
+    async () => {
+      const pkg = modelInfo.packages[0];
+      const dimensionChoices =
+        pkg.dimensions?.map((d) => Object.keys(d.options)[0]) || [];
+      const model = {
+        ...pkg.params,
+        ...modelInfo.params,
+        ..._.merge(
+          {},
+          ...(pkg.dimensions?.map((dimension, i) => {
+            if (!dimensionChoices?.[i]) return {};
+            return {
+              ...dimension.options[dimensionChoices[i]],
+            };
+          }) || []),
+        ),
+        provider: modelInfo.provider,
+      };
+      ideMessenger.post("config/addModel", { model });
+      dispatch(setDefaultModel({ title: model.title, force: true }));
+      navigate("/");
+    },
+    [modelInfo, providerName],
+  );
 
   const handleContinue = () => {
     if (!modelInfo) return;
@@ -159,7 +188,6 @@ function ConfigureProvider() {
             className="mt-2"
             source={modelInfo?.longDescription || modelInfo?.description}
           />
-          <br />
           
           {/* The WatsonX Authentication coukd be done by two different ways
            1 ==> Using Api key
@@ -304,78 +332,40 @@ function ConfigureProvider() {
 
         {providerName === "pearai_server" ? (
             <>
-              <h3>1. Sign Up at <a href="https://trypear.ai/pricing" target="_blank" rel="noopener noreferrer">trypear.ai</a></h3>
-              <h3>2. Login w/ PearAI </h3>
-              <p style={{ color: lightGray }}>After login, the webapp should redirect you back here. If it doesn't, click again.</p>
-              <CustomModelButton
-                className="m-5"
-                disabled={false}
-                onClick={() =>
-                  ideMessenger.post(
-                    "openUrl",
-                    "https://trypear.ai/signin?callback=pearai://pearai.pearai/auth" // Change to http://localhost:3000 and run pear-landing-page repo to test locally
-                  )
-                }
-              >
-                <h3 className="text-center my-2">Login</h3>
-                <img
-                  src={`${window.vscMediaUrl}/logos/${modelInfo?.icon}`}
-                  height="24px"
-                  style={{ marginRight: "5px" }}
-                />
-              </CustomModelButton>
-              <h3>3. Click To Complete </h3>
-              <GridDiv>
-                {modelInfo?.packages.map((pkg, idx) => (
-                  <ModelCard
-                    key={idx}
-                    disabled={disableModelCards()}
-                    title={"Add To Configuration"}
-                    description={""}
-                    tags={pkg.tags}
-                    dimensions={pkg.dimensions}
-                    onClick={(e, dimensionChoices) => {
-                      if (
-                        disableModelCards() &&
-                        enablecardsForApikey() &&
-                        enablecardsForCredentials()
-                      )
-                        return;
-                      let formParams: any = {};
-                      for (const d of modelInfo.collectInputFor || []) {
-                        const val = formMethods.watch(d.key);
-                        if (val === "" || val === undefined || val === null) {
-                          continue;
-                        }
-                        formParams = updatedObj(formParams, {
-                          [d.key]: d.inputType === "text" ? val : parseFloat(val),
-                        });
-                      }
-    
-                      const model = {
-                        ...pkg.params,
-                        ...modelInfo.params,
-                        ..._.merge(
-                          {},
-                          ...(pkg.dimensions?.map((dimension, i) => {
-                            if (!dimensionChoices?.[i]) return {};
-                            return {
-                              ...dimension.options[dimensionChoices[i]],
-                            };
-                          }) || []),
-                        ),
-                        ...formParams,
-                        provider: modelInfo.provider,
-                      };
-                      ideMessenger.post("config/addModel", { model });
-                      dispatch(
-                        setDefaultModel({ title: model.title, force: true }),
-                      );
-                      navigate("/");
-                    }}
+        
+                <CustomModelButton
+                  className="m-5"
+                  disabled={false}
+                  onClick={() =>
+                    ideMessenger.post(
+                      "openUrl",
+                      "https://trypear.ai/signin?callback=pearai://pearai.pearai/auth", // Change to http://localhost:3000 and run pear-landing-page repo to test locally
+                    )
+                  }
+                >
+                  <h3 className="text-center my-2">Sign Up / Log In</h3>
+                  <img
+                    src={`${window.vscMediaUrl}/logos/${modelInfo?.icon}`}
+                    height="24px"
+                    style={{ marginRight: "5px" }}
                   />
-                ))}
-              </GridDiv>
+                </CustomModelButton>
+                <p style={{ color: lightGray }} className="mx-3">
+                  After login, the website should redirect you back here.
+                </p>
+                <small 
+                  style={{ 
+                    color: lightGray, 
+                    fontSize: '0.85em', 
+                    display: 'block' 
+                  }} 
+                  className="mx-3"
+                >
+                  Note: Having trouble logging in? Open PearAI from the dashboard on the {' '}
+                  <a href="https://trypear.ai/dashboard" target="_blank" rel="noopener noreferrer">
+                    website
+                  </a>.
+                  </small>
             </>
             ) : (
               <>

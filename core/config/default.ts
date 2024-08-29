@@ -93,12 +93,32 @@ export const defaultSlashCommandsJetBrains = [
 export const defaultConfig: SerializedContinueConfig = {
   models: [
     {
-      "model": "pearai_model",
-      "contextLength": 128000,
-      "title": "PearAI Server",
-      "systemMessage": "You are an expert software developer. You give helpful and concise responses.",
-      "provider": "pearai_server"
-    }
+      model: "pearai_model",
+      contextLength: 300000,
+      title: "PearAI Model",
+      systemMessage:
+        "You are an expert software developer. You give helpful and concise responses.",
+      provider: "pearai_server",
+      isDefault: true,
+    },
+    {
+      model: "gpt-4o",
+      contextLength: 300000,
+      title: "GPT-4o (PearAI)",
+      systemMessage:
+        "You are an expert software developer. You give helpful and concise responses.",
+      provider: "pearai_server",
+      isDefault: true,
+    },
+    {
+      model: "claude-3-5-sonnet-20240620",
+      contextLength: 3000000,
+      title: "Claude 3.5 Sonnet (PearAI)",
+      systemMessage:
+        "You are an expert software developer. You give helpful and concise responses.",
+      provider: "pearai_server",
+      isDefault: true,
+    },
   ],
   customCommands: [
     {
@@ -108,11 +128,11 @@ export const defaultConfig: SerializedContinueConfig = {
       description: "Write unit tests for highlighted code",
     },
   ],
-  // TODO: Add this back when we have autocomplete working. 
+  // Todo: Add autocomplete by default
   // tabAutocompleteModel: {
-  //   title: "Starcoder2 3b",
+  //   title: "PearAI Autocomplete",
   //   provider: "pearai_server",
-  //   model: "starcoder2:3b",
+  //   model: "pearai_autocomplete",
   // },
   contextProviders: defaultContextProvidersVsCode,
   slashCommands: defaultSlashCommandsVscode,

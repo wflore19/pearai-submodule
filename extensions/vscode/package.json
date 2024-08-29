@@ -2,7 +2,7 @@
   "name": "pearai",
   "publisher": "pearai",
   "icon": "media/icon.png",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/trypear/pearai-app"
@@ -189,6 +189,12 @@
         "group": "PearAI"
       },
       {
+        "command": "pearai.openPearAiWelcome",
+        "category": "PearAI",
+        "title": "Open Welcome page for PearAI",
+        "group": "PearAI"
+      },
+      {
         "command": "pearai.toggleTabAutocompleteEnabled",
         "category": "PearAI",
         "title": "Toggle Autocomplete Enabled",
@@ -266,6 +272,12 @@
         "command": "pearai.login",
         "category": "PearAI",
         "title": "Login to PearAI",
+        "group": "PearAI"
+      },
+      {
+        "command": "pearai.logout",
+        "category": "PearAI",
+        "title": "Logout of PearAI",
         "group": "PearAI"
       },
       {
@@ -376,13 +388,13 @@
       },
       {
         "command": "pearai.resizeAuxiliaryBarWidth",
-        "mac": "cmd+[",
-        "key": "ctrl+["
+        "mac": "cmd+\\",
+        "key": "ctrl+\\"
       },
       {
         "command": "pearai.viewHistory",
-        "mac": "cmd+o",
-        "key": "ctrl+o"
+        "mac": "cmd+h",
+        "key": "ctrl+h"
       }
     ],
     "submenus": [

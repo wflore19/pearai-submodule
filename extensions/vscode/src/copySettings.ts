@@ -4,8 +4,10 @@ import * as path from 'path';
 import * as os from 'os';
 
 const pearAISettingsDir = path.join(os.homedir(), '.pearai');
-const firstLaunchFlag = path.join(pearAISettingsDir, 'firstLaunch.flag');
 const pearAIDevExtensionsDir = path.join(os.homedir(), '.pearai', 'extensions');
+
+const firstLaunchFlag = path.join(pearAISettingsDir, 'firstLaunch.flag');
+export const isFirstLaunch = fs.existsSync(firstLaunchFlag);
 
 function getPearAISettingsDir() {
     const platform = process.platform;
@@ -49,9 +51,18 @@ function copyVSCodeSettingsToPearAIDir() {
         }
     });
 
-    copyDirectoryRecursiveSync(vscodeExtensionsDir, pearAIDevExtensionsDir, ['vscode-pylance', 'ritwickdey.liveserver']);
+
+    const exclusions = ['pearai.pearai', 'continue.continue']
+    const platform = process.platform;
+    const arch = process.arch;
+
+    if (platform === "darwin" && arch === "arm64") {
+        exclusions.push('vscode-pylance');
     }
-  
+
+    copyDirectoryRecursiveSync(vscodeExtensionsDir, pearAIDevExtensionsDir, exclusions);
+    }
+
 function getVSCodeSettingsDir() {
     const platform = process.platform;
     if (platform === 'win32') {
@@ -70,12 +81,12 @@ function copyDirectoryRecursiveSync(source: string, destination: string, exclusi
     fs.readdirSync(source).forEach(item => {
         const sourcePath = path.join(source, item);
         const destinationPath = path.join(destination, item);
-        
+
         // Check if the current item should be excluded
-        const shouldExclude = exclusions.some(exclusion => 
+        const shouldExclude = exclusions.some(exclusion =>
             sourcePath.toLowerCase().includes(exclusion.toLowerCase())
         );
-        
+
         if (!shouldExclude) {
             if (fs.lstatSync(sourcePath).isDirectory()) {
                 copyDirectoryRecursiveSync(sourcePath, destinationPath, exclusions);
@@ -86,12 +97,15 @@ function copyDirectoryRecursiveSync(source: string, destination: string, exclusi
     });
 }
 
-export function setupSettingsAndInformUser() {
-    if (!fs.existsSync(firstLaunchFlag)) {
-        vscode.window.showInformationMessage('Copying your current VSCode settings and extensions over to PearAI!');
-        copyVSCodeSettingsToPearAIDir();
-        fs.writeFileSync(firstLaunchFlag, 'This is the first launch flag file');
-        vscode.window.showInformationMessage('Your VSCode settings and extensions have been transferred over to PearAI! You may need to restart your editor for the changes to take effect.', 'Ok');
-    }
+export function importUserSettingsFromVSCode() {
+    // this function is synchronous and copying files takes time
+    // thats why run it after 3 seconds, until which extension activates.
+    setTimeout(() => {
+        if (!fs.existsSync(firstLaunchFlag)) {
+            vscode.window.showInformationMessage('Copying your current VSCode settings and extensions over to PearAI!');
+            copyVSCodeSettingsToPearAIDir();
+            fs.writeFileSync(firstLaunchFlag, 'This is the first launch flag file');
+            vscode.window.showInformationMessage('Your VSCode settings and extensions have been transferred over to PearAI! You may need to restart your editor for the changes to take effect.', 'Ok');
+        }
+    }, 3000);
 }
-  

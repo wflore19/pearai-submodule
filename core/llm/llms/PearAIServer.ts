@@ -9,20 +9,32 @@ import {
 import { SERVER_URL } from "../../util/parameters.js";
 import { Telemetry } from "../../util/posthog.js";
 import { BaseLLM } from "../index.js";
-import { streamResponse, streamJSON } from "../stream.js";
+import { streamSse, streamResponse, streamJSON } from "../stream.js";
 import { checkTokens } from "../../db/token.js";
 import { stripImages } from "../images.js";
+import {
+  compileChatMessages,
+  countTokens,
+  pruneRawPromptFromTop,
+} from "./../countTokens.js";
+
 
 class PearAIServer extends BaseLLM {
   getCredentials: (() => Promise<PearAuth | undefined>) | undefined = undefined;
   setCredentials: (auth: PearAuth) => Promise<void> = async () => {};
+  pearAIAccessToken: string | undefined = undefined;
+  pearAIRefreshToken: string | undefined = undefined;
+
 
   static providerName: ModelProvider = "pearai_server";
   constructor(options: LLMOptions) {
     super(options);
+    this.pearAIAccessToken = undefined;
+    this.pearAIRefreshToken = undefined;
   }
-  
+
   private async _getHeaders() {
+    await this._checkAndUpdateCredentials();
     return {
       "Content-Type": "application/json",
       ...(await getHeaders()),
@@ -71,21 +83,30 @@ class PearAIServer extends BaseLLM {
     }
   }
 
+  countTokens(text: string): number {
+    return countTokens(text, this.model);
+  }
+
+
   protected _convertMessage(message: ChatMessage) {
     if (typeof message.content === "string") {
       return message;
     }
-
-    const parts = message.content.map((part) => {
-      return {
-        type: part.type,
-        text: part.text,
-        image_url: { ...part.imageUrl, detail: "low" },
-      };
-    });
     return {
       ...message,
-      content: parts,
+      content: message.content.map((part) => {
+        if (part.type === "text") {
+          return part;
+        }
+        return {
+          type: "image",
+          source: {
+            type: "base64",
+            media_type: "image/jpeg",
+            data: part.imageUrl?.url.split(",")[1],
+          },
+        };
+      }),
     };
   }
 
@@ -101,38 +122,129 @@ class PearAIServer extends BaseLLM {
       true,
     );
 
+    await this._checkAndUpdateCredentials();
+
+    const body = JSON.stringify({
+            messages: messages.map(this._convertMessage),
+            ...args,
+        });
+
+    const response = await this.fetch(`${SERVER_URL}/server_chat`, {
+      method: "POST",
+      headers: {
+        ...(await this._getHeaders()),
+        Authorization: `Bearer ${this.pearAIAccessToken}`,
+      },
+      body: body,
+    });
+
+    let completion = "";
+
+    for await (const value of streamJSON(response)) {
+      // Handle initial metadata if necessary
+      if (value.metadata && Object.keys(value.metadata).length > 0) {
+        // Do something with metadata if needed, currently just logging
+        console.log("Metadata received:", value.metadata);
+      }
+
+      if (value.content) {
+        yield {
+          role: "assistant",
+          content: value.content,
+        };
+        completion += value.content;
+      }
+    }
+    this._countTokens(completion, args.model, false);
+  }
+
+  async *_streamFim(
+    prefix: string,
+    suffix: string,
+    options: CompletionOptions
+  ): AsyncGenerator<string> {
+    options.stream = true;
+
+    let user_logged_in = await this._checkAndUpdateCredentials();
+    if (!user_logged_in) {
+      return null
+    }
+
+    const endpoint = `${SERVER_URL}/server_fim`;
+    const resp = await this.fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify({
+        model: options.model,
+          prefix,
+          suffix,
+        max_tokens: options.maxTokens,
+        temperature: options.temperature,
+        top_p: options.topP,
+        frequency_penalty: options.frequencyPenalty,
+        presence_penalty: options.presencePenalty,
+        stop: options.stop,
+        stream: true,
+        }),
+      headers: {
+        ...(await this._getHeaders()),
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${this.pearAIAccessToken}`,
+      },
+    });
+    let completion = "";
+    for await (const chunk of streamSse(resp)) {
+      yield chunk.choices[0].delta.content;
+    }
+  }
+
+
+  async listModels(): Promise<string[]> {
+    return [
+      "pearai_model",
+    ];
+  }
+  supportsFim(): boolean {
+    // Todo: Change to true when server is ready
+    return false;
+  }
+
+  private async _checkAndUpdateCredentials(): Promise<boolean> {
     try {
       let creds = undefined;
 
-      if (this.getCredentials) {
+
+      if (this.getCredentials && this.pearAIAccessToken === undefined) {
         console.log("Attempting to get credentials...");
         creds = await this.getCredentials();
 
-
         if (creds && creds.accessToken && creds.refreshToken) {
-          this.apiKey = creds.accessToken;
-          this.refreshToken = creds.refreshToken;
-        } 
+          this.pearAIAccessToken = creds.accessToken;
+          this.pearAIRefreshToken = creds.refreshToken;
+        }
+        else {
+          return false;
+        }
       }
 
-      const tokens = await checkTokens(this.apiKey, this.refreshToken);
+      const tokens = await checkTokens(this.pearAIAccessToken, this.pearAIRefreshToken);
 
-      if (tokens.accessToken !== this.apiKey || tokens.refreshToken !== this.refreshToken) {
-        if (tokens.accessToken !== this.apiKey) {
-          this.apiKey = tokens.accessToken;
+      if (tokens.accessToken !== this.pearAIAccessToken || tokens.refreshToken !== this.pearAIRefreshToken) {
+        if (tokens.accessToken !== this.pearAIAccessToken) {
+          this.pearAIAccessToken = tokens.accessToken;
           console.log(
             "PearAI access token changed from:",
-            this.apiKey,
+            this.pearAIAccessToken,
             "to:",
             tokens.accessToken,
           );
         }
-      
-        if (tokens.refreshToken !== this.refreshToken) {
-          this.refreshToken = tokens.refreshToken;
+
+        if (tokens.refreshToken !== this.pearAIRefreshToken) {
+          this.pearAIRefreshToken = tokens.refreshToken;
           console.log(
             "PearAI refresh token changed from:",
-            this.refreshToken,
+            this.pearAIRefreshToken,
             "to:",
             tokens.refreshToken,
           );
@@ -147,45 +259,29 @@ class PearAIServer extends BaseLLM {
       console.error("Error checking token expiration:", error);
       // Handle the error (e.g., redirect to login page)
     }
+    return true
+  }
 
-    const response = await this.fetch(`${SERVER_URL}/server_chat`, {
+  protected async _sendTokensUsed(
+    kind: string,
+    prompt: string,
+    completion: string,
+  ) {
+    let promptTokens = this.countTokens(prompt);
+    let generatedTokens = this.countTokens(completion);
+
+    const response = await this.fetch(`${SERVER_URL}/log_tokens`, {
       method: "POST",
       headers: {
         ...(await this._getHeaders()),
-        Authorization: `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.pearAIAccessToken}`,
       },
       body: JSON.stringify({
-        messages: messages.map(this._convertMessage),
-        ...args,
+        kind,
+        promptTokens,
+        generatedTokens
       }),
-    });
-
-    let completion = "";
-
-    for await (const value of streamJSON(response)) {
-      // Handle initial metadata if necessary
-      if (value.metadata && Object.keys(value.metadata).length > 0) {
-        // Do something with metadata if needed, currently just logging
-        console.log("Metadata received:", value.metadata);
-      }
-
-      if (value.content) {
-        let content = value.content.replaceAll("<|im_end|>", " ");
-        content = value.content.replaceAll("<|im_start|> ", "\n");
-        yield {
-          role: "assistant",
-          content: content,
-        };
-        completion += content;
-      }
-    }
-    this._countTokens(completion, args.model, false);
-  }
-
-  async listModels(): Promise<string[]> {
-    return [
-      "pearai-latest",
-    ];
+    })
   }
 }
 

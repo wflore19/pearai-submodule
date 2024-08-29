@@ -44,6 +44,7 @@ import { stripImages } from "./images.js";
 export abstract class BaseLLM implements ILLM {
   static providerName: ModelProvider;
   static defaultOptions: Partial<LLMOptions> | undefined = undefined;
+  protected async _sendTokensUsed?(kind: string, prompt: string, completion: string): Promise<void>;
 
   get providerName(): ModelProvider {
     return (this.constructor as typeof BaseLLM).providerName;
@@ -64,7 +65,7 @@ export abstract class BaseLLM implements ILLM {
       const isMistralApi = typeof this.apiBase === "string" && /^https:\/\/(?:[a-zA-Z0-9-]+\.)*api\.mistral\.ai(?:\/|$)/.test(this.apiBase);
       const isLegacyPort = this.apiBase?.includes(":1337");
       const usesNewEndpoint = this._llmOptions.useLegacyCompletionsEndpoint?.valueOf() === false;
-      
+
       if (isGroqApi || isMistralApi || isLegacyPort || usesNewEndpoint) {
         // Jan + Groq + Mistral  don't support completions : (
         // Seems to be going out of style...
@@ -98,6 +99,7 @@ export abstract class BaseLLM implements ILLM {
   apiBase?: string;
   capabilities?: ModelCapability
   refreshToken?: string;
+  isDefault?: boolean | undefined;
 
   engine?: string;
   apiVersion?: string;
@@ -134,7 +136,7 @@ export abstract class BaseLLM implements ILLM {
 
     const templateType =
       options.template ?? autodetectTemplateType(options.model);
-
+    this.isDefault = options.isDefault;
     this.title = options.title;
     this.uniqueId = options.uniqueId ?? "None";
     this.systemMessage = options.systemMessage;
@@ -284,6 +286,9 @@ ${prompt}`;
       promptTokens: promptTokens,
       generatedTokens: generatedTokens,
     });
+    if (this._sendTokensUsed) {
+      this._sendTokensUsed(model, prompt, completion);
+    }
   }
 
   fetch(url: RequestInfo | URL, init?: RequestInit): Promise<Response> {
@@ -417,6 +422,8 @@ ${prompt}`;
       madeUpFimPrompt,
       completion,
     );
+
+
 
     if (log && this.writeLog) {
       await this.writeLog(`Completion:\n\n${completion}\n\n`);
