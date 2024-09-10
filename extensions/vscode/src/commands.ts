@@ -268,7 +268,7 @@ const commandsMap: (
 
       addCodeToContextFromRange(range, sidebar.webviewProtocol, prompt);
 
-      vscode.commands.executeCommand("pearai.continueGUIView.focus");
+      vscode.commands.executeCommand("pearai.focusContinueInput")
     },
     // Passthrough for telemetry purposes
     "pearai.defaultQuickAction": async (args: QuickEditShowParams) => {
@@ -671,7 +671,7 @@ const commandsMap: (
       const feedback = await vscode.window.showInputBox({
         ignoreFocusOut: true,
         prompt:
-          "Please share what went wrong with the last completion. The details of the completion as well as this message will be sent to the Continue team in order to improve.",
+          "Please share what went wrong with the last completion. The details of the completion as well as this message will be sent to PearAI in order to improve.",
       });
       if (feedback) {
         const client = await continueServerClientPromise;

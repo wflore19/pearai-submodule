@@ -140,8 +140,7 @@ class VsCodeIde implements IDE {
       version: vscode.version,
       remoteName: vscode.env.remoteName || "local",
       extensionVersion:
-        vscode.extensions.getExtension("pearai.pearai")?.packageJSON
-          .version,
+        vscode.extensions.getExtension("pearai.pearai")?.packageJSON.version,
     });
   }
   readRangeInFile(filepath: string, range: Range): Promise<string> {
@@ -444,7 +443,7 @@ class VsCodeIde implements IDE {
     return this.getIdeSettingsSync();
   }
 
-  async getPearAuth(): Promise<PearAuth | undefined> {
+  async getPearAuth(): Promise<PearAuth> {
     const creds = await this.ideUtils.getPearCredentials();
     return creds;
   }
